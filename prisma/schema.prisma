@@ -51,7 +51,7 @@ model Customer {
   id           String   @id @default(cuid())
   email        String       @unique
   name         String
-  passwordHash String
+  passwordHash String?
   role         CustomerRole @default(CUSTOMER)
   addresses    Json?        // array de direcciones
   orders       Order[]

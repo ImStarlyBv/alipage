@@ -1,10 +1,15 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { compare } from "bcryptjs";
 import { prisma } from "@/lib/models";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -21,7 +26,7 @@ export const authOptions: NextAuthOptions = {
           select: { id: true, email: true, name: true, passwordHash: true, role: true },
         });
 
-        if (!customer) {
+        if (!customer || !customer.passwordHash) {
           return null;
         }
 
@@ -43,11 +48,47 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        const email = user.email;
+        if (!email) return false;
+
+        // Find or create customer for this Google account
+        const existing = await prisma.customer.findUnique({
+          where: { email },
+        });
+
+        if (!existing) {
+          // Create new customer from Google profile
+          await prisma.customer.create({
+            data: {
+              email,
+              name: user.name || email.split("@")[0],
+              // No passwordHash — Google OAuth user
+            },
+          });
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, account }) {
+      if (user && account?.provider === "credentials") {
         token.id = user.id;
         token.role = (user as { role: string }).role;
       }
+
+      if (account?.provider === "google" && user?.email) {
+        // Look up the customer to get their DB id and role
+        const customer = await prisma.customer.findUnique({
+          where: { email: user.email },
+          select: { id: true, role: true },
+        });
+        if (customer) {
+          token.id = customer.id;
+          token.role = customer.role;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {

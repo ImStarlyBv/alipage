@@ -147,13 +147,39 @@
 ---
 
 ## Order of Implementation
-1. `globals.css` + `layout.tsx` (fonts & colors - affects everything)
-2. `Header.tsx` + `Footer.tsx` (layout shell)
-3. `ProductCard.tsx` (used on home + products page)
-4. Home `page.tsx`
-5. `ImageCarousel.tsx` + `DescriptionGallery.tsx` (new components)
-6. Product detail page (biggest change)
-7. Products listing + Categories pages
-8. Cart + Checkout pages
-9. Auth pages
-10. Supporting components (AddToCartButton, ShippingOptions, CategoryNav)
+1. [x] `globals.css` + `layout.tsx` (fonts & colors - affects everything)
+2. [x] `Header.tsx` + `Footer.tsx` (layout shell)
+3. [x] `ProductCard.tsx` (used on home + products page)
+4. [x] Home `page.tsx`
+5. [x] `ImageCarousel.tsx` + `DescriptionGallery.tsx` (new components)
+6. [x] Product detail page (biggest change)
+7. [x] Products listing + Categories pages
+8. [x] Cart + Checkout pages
+9. [x] Auth pages
+10. [x] Supporting components (AddToCartButton, ShippingOptions, CategoryNav)
+
+---
+
+## Post-Revamp Fixes (completed)
+
+### 16. Responsive Design Fixes
+- [x] Header: full mobile menu with all auth links, cart icon, hamburger toggle
+- [x] Hero: text scales 3xl → 4xl → 5xl → 6xl across breakpoints
+- [x] ImageCarousel: arrows always visible on mobile (no hover needed), smaller thumbnails
+- [x] ProductCard: smaller text/padding on mobile
+- [x] AddToCartButton: stacks vertically on small screens, shows "Go to Cart" after adding
+- [x] Cart: truncate long item names, smaller images on mobile
+- [x] Checkout: tighter padding on mobile, truncate item names
+- [x] Auth pages: account for header height, smaller padding
+- [x] Footer: tighter gap on small screens
+- [x] DescriptionGallery: single column images, prevent text overflow
+- [x] Product grids: tighter gap-3 on mobile, gap-4 on sm+
+
+### 17. Sticky Cart Bar (mobile)
+- [x] New `StickyCartBar.tsx` component — fixed bottom bar on product pages (mobile only)
+- [x] Shows price + "Add to Cart" button, switches to "Go to Cart" after adding
+- [x] Hidden on md+ screens where inline button is sufficient
+- [x] Product detail page has bottom padding to prevent content hidden behind bar
+
+### 18. `account/orders/[id]/page.tsx` + `checkout/confirmation/page.tsx`
+- [x] Restyled with teal/beige palette to match rest of app
