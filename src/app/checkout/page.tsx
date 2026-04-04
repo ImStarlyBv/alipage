@@ -81,6 +81,9 @@ const COUNTRIES = [
   { code: "KE", name: "Kenya", phone: "+254" },
 ];
 
+const inputClass =
+  "mt-1 block w-full rounded-lg border border-primary/20 bg-white px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30";
+
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -141,25 +144,25 @@ export default function CheckoutPage() {
   if (loading || status === "loading") {
     return (
       <div className="mx-auto max-w-3xl px-4 py-8">
-        <p className="text-gray-500">Loading checkout...</p>
+        <p className="text-foreground/50">Loading checkout...</p>
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="text-3xl font-bold">Checkout</h1>
+      <h1 className="font-heading text-3xl font-bold text-foreground">Checkout</h1>
 
       {/* Order summary */}
-      <div className="mt-6 rounded-lg border p-4">
-        <h2 className="text-lg font-semibold">Order Summary</h2>
-        <div className="mt-3 divide-y">
+      <div className="mt-6 rounded-xl bg-beige p-5">
+        <h2 className="font-heading text-lg font-semibold text-foreground">Order Summary</h2>
+        <div className="mt-3 divide-y divide-secondary/30">
           {items.map((item) => (
             <div
               key={`${item.productId}:${item.variantId || ""}`}
               className="flex items-center gap-3 py-3"
             >
-              <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded bg-gray-100">
+              <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-white">
                 {item.image && (
                   <Image
                     src={item.image}
@@ -171,81 +174,81 @@ export default function CheckoutPage() {
                 )}
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium">{item.name}</p>
-                <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                <p className="text-sm font-medium text-foreground">{item.name}</p>
+                <p className="text-xs text-foreground/50">Qty: {item.quantity}</p>
               </div>
-              <p className="text-sm font-bold">
+              <p className="text-sm font-bold text-primary-dark">
                 ${(Number(item.unitPrice) * item.quantity).toFixed(2)}
               </p>
             </div>
           ))}
         </div>
-        <div className="mt-3 border-t pt-3 text-right">
-          <p className="text-lg font-bold">Total: ${subtotal.toFixed(2)}</p>
+        <div className="mt-3 border-t border-secondary/30 pt-3 text-right">
+          <p className="text-lg font-bold text-primary-dark">Total: ${subtotal.toFixed(2)}</p>
         </div>
       </div>
 
       {/* Shipping address */}
-      <div className="mt-6 rounded-lg border p-4">
-        <h2 className="text-lg font-semibold">Shipping Address</h2>
+      <div className="mt-6 rounded-xl border border-primary/10 bg-white p-5">
+        <h2 className="font-heading text-lg font-semibold text-foreground">Shipping Address</h2>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               Full Name *
             </label>
             <input
               type="text"
               value={shippingAddress.full_name}
               onChange={(e) => updateAddress("full_name", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               Street Address *
             </label>
             <input
               type="text"
               value={shippingAddress.address}
               onChange={(e) => updateAddress("address", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               City *
             </label>
             <input
               type="text"
               value={shippingAddress.city}
               onChange={(e) => updateAddress("city", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               State / Province
             </label>
             <input
               type="text"
               value={shippingAddress.province}
               onChange={(e) => updateAddress("province", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               ZIP / Postal Code *
             </label>
             <input
               type="text"
               value={shippingAddress.zip}
               onChange={(e) => updateAddress("zip", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               Country *
             </label>
             <select
@@ -258,7 +261,7 @@ export default function CheckoutPage() {
                 const required: (keyof ShippingAddress)[] = ["full_name", "mobile_no", "address", "city", "country", "zip"];
                 setAddressValid(required.every((k) => updated[k].trim().length > 0));
               }}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
             >
               <option value="">Select country</option>
               {COUNTRIES.map((c) => (
@@ -269,7 +272,7 @@ export default function CheckoutPage() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               Phone Country Code
             </label>
             <input
@@ -277,33 +280,33 @@ export default function CheckoutPage() {
               value={shippingAddress.phone_country}
               onChange={(e) => updateAddress("phone_country", e.target.value)}
               placeholder="e.g. +1"
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
               readOnly
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-foreground/70">
               Phone Number *
             </label>
             <input
               type="text"
               value={shippingAddress.mobile_no}
               onChange={(e) => updateAddress("mobile_no", e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+              className={inputClass}
             />
           </div>
         </div>
       </div>
 
       {/* PayPal payment */}
-      <div className="mt-6 rounded-lg border p-4">
-        <h2 className="text-lg font-semibold">Payment</h2>
+      <div className="mt-6 rounded-xl border border-primary/10 bg-white p-5">
+        <h2 className="font-heading text-lg font-semibold text-foreground">Payment</h2>
         {!addressValid && (
-          <p className="mt-1 text-sm text-amber-600">
+          <p className="mt-1 text-sm text-secondary">
             Please fill in all required shipping fields before paying.
           </p>
         )}
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-foreground/50">
           Complete your purchase using PayPal.
         </p>
         <div className="mt-4">

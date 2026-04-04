@@ -21,16 +21,16 @@ export default async function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-gray-50 px-4 py-16 text-center">
-        <h1 className="text-4xl font-bold tracking-tight">
+      <section className="bg-beige px-4 py-20 text-center">
+        <h1 className="font-heading text-5xl font-bold tracking-tight text-foreground md:text-6xl">
           Quality Products, Great Prices
         </h1>
-        <p className="mx-auto mt-4 max-w-md text-gray-600">
+        <p className="mx-auto mt-4 max-w-md text-foreground/60">
           Discover our curated selection of products shipped worldwide.
         </p>
         <Link
           href="/products"
-          className="mt-6 inline-block rounded bg-black px-6 py-2.5 text-sm font-medium text-white hover:bg-gray-800"
+          className="mt-8 inline-block rounded-full bg-primary px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
         >
           Shop Now
         </Link>
@@ -38,12 +38,14 @@ export default async function Home() {
 
       {/* Featured products */}
       {products.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-12">
+        <section className="mx-auto max-w-7xl px-4 py-14">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">New Arrivals</h2>
+            <h2 className="font-heading text-2xl font-bold text-foreground">
+              New Arrivals
+            </h2>
             <Link
               href="/products"
-              className="text-sm text-gray-600 hover:text-black"
+              className="text-sm text-primary-dark transition-colors hover:text-primary"
             >
               View all &rarr;
             </Link>

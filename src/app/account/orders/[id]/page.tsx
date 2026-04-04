@@ -63,7 +63,7 @@ export default function OrderDetailPage() {
   if (loading) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-8">
-        <p className="text-gray-500">Loading order...</p>
+        <p className="text-foreground/50">Loading order...</p>
       </div>
     );
   }
@@ -74,7 +74,7 @@ export default function OrderDetailPage() {
         <p className="text-red-600">{error || "Order not found"}</p>
         <Link
           href="/account/orders"
-          className="mt-4 inline-block text-sm hover:underline"
+          className="mt-4 inline-block text-sm text-primary-dark hover:underline"
         >
           &larr; Back to orders
         </Link>
@@ -86,31 +86,31 @@ export default function OrderDetailPage() {
     <div className="mx-auto max-w-3xl px-4 py-8">
       <Link
         href="/account/orders"
-        className="text-sm text-gray-500 hover:text-black"
+        className="text-sm text-primary-dark transition-colors hover:text-primary"
       >
         &larr; Back to orders
       </Link>
 
-      <h1 className="mt-4 text-2xl font-bold">
+      <h1 className="mt-4 font-heading text-2xl font-bold text-foreground">
         Order #{order.orderNumber.slice(0, 8)}
       </h1>
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-foreground/50">
         Placed on {new Date(order.createdAt).toLocaleDateString()}
       </p>
 
       {/* Status */}
-      <div className="mt-6 rounded-lg border p-4">
-        <h2 className="text-sm font-semibold text-gray-500">Status</h2>
-        <p className="mt-1 text-lg font-bold">
+      <div className="mt-6 rounded-xl bg-beige p-5">
+        <h2 className="text-sm font-semibold text-foreground/50">Status</h2>
+        <p className="mt-1 text-lg font-bold text-primary-dark">
           {statusLabels[order.status] || order.status}
         </p>
 
         {order.aliexpressTrackingNumber && (
           <div className="mt-3">
-            <h3 className="text-sm font-semibold text-gray-500">
+            <h3 className="text-sm font-semibold text-foreground/50">
               Tracking Number
             </h3>
-            <p className="mt-1 font-mono text-sm">
+            <p className="mt-1 font-mono text-sm text-foreground">
               {order.aliexpressTrackingNumber}
             </p>
           </div>
@@ -118,23 +118,23 @@ export default function OrderDetailPage() {
       </div>
 
       {/* Items */}
-      <div className="mt-6 rounded-lg border p-4">
-        <h2 className="text-sm font-semibold text-gray-500">Items</h2>
-        <div className="mt-3 divide-y">
+      <div className="mt-6 rounded-xl border border-primary/10 bg-white p-5">
+        <h2 className="text-sm font-semibold text-foreground/50">Items</h2>
+        <div className="mt-3 divide-y divide-secondary/30">
           {order.items.map((item, i) => (
             <div key={i} className="flex justify-between py-2">
               <div>
-                <p className="text-sm font-medium">{item.name}</p>
-                <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                <p className="text-sm font-medium text-foreground">{item.name}</p>
+                <p className="text-xs text-foreground/50">Qty: {item.quantity}</p>
               </div>
-              <p className="text-sm font-bold">
+              <p className="text-sm font-bold text-primary-dark">
                 ${(Number(item.unitPrice) * item.quantity).toFixed(2)}
               </p>
             </div>
           ))}
         </div>
-        <div className="mt-3 border-t pt-3 text-right">
-          <p className="text-lg font-bold">
+        <div className="mt-3 border-t border-secondary/30 pt-3 text-right">
+          <p className="text-lg font-bold text-primary-dark">
             Total: ${Number(order.totalPaid).toFixed(2)} {order.currency}
           </p>
         </div>

@@ -58,25 +58,28 @@ export default function RegisterPage() {
     router.refresh();
   }
 
+  const inputClass =
+    "mt-1 block w-full rounded-lg border border-primary/20 bg-white px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30";
+
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-sm space-y-6">
+      <div className="w-full max-w-sm space-y-6 rounded-xl bg-beige p-8 shadow-sm">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Create Account</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="font-heading text-2xl font-bold text-foreground">Create Account</h1>
+          <p className="mt-1 text-sm text-foreground/50">
             Sign up to start shopping
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-lg bg-secondary/30 p-3 text-sm text-red-700">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium">
+            <label htmlFor="name" className="block text-sm font-medium text-foreground/70">
               Name
             </label>
             <input
@@ -85,12 +88,12 @@ export default function RegisterPage() {
               type="text"
               required
               autoComplete="name"
-              className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className="block text-sm font-medium text-foreground/70">
               Email
             </label>
             <input
@@ -99,12 +102,12 @@ export default function RegisterPage() {
               type="email"
               required
               autoComplete="email"
-              className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label htmlFor="password" className="block text-sm font-medium text-foreground/70">
               Password
             </label>
             <input
@@ -114,12 +117,12 @@ export default function RegisterPage() {
               required
               minLength={8}
               autoComplete="new-password"
-              className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground/70">
               Confirm Password
             </label>
             <input
@@ -129,22 +132,22 @@ export default function RegisterPage() {
               required
               minLength={8}
               autoComplete="new-password"
-              className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded bg-black py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+            className="w-full rounded-full bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50"
           >
             {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-sm text-foreground/50">
           Already have an account?{" "}
-          <Link href="/auth/login" className="font-medium text-black hover:underline">
+          <Link href="/auth/login" className="font-medium text-primary-dark hover:underline">
             Sign in
           </Link>
         </p>

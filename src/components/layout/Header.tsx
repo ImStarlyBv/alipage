@@ -26,19 +26,19 @@ export default function Header() {
   }, [session]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+    <header className="sticky top-0 z-50 border-b border-secondary/40 bg-cream shadow-sm">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          Store
+        <Link href="/" className="font-heading text-2xl font-bold tracking-tight text-primary-dark">
+          Clevver
         </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-sm md:flex">
-          <Link href="/products" className="hover:text-gray-600">
+          <Link href="/products" className="text-foreground/70 transition-colors hover:text-primary-dark">
             Products
           </Link>
-          <Link href="/categories" className="hover:text-gray-600">
+          <Link href="/categories" className="text-foreground/70 transition-colors hover:text-primary-dark">
             Categories
           </Link>
         </nav>
@@ -47,37 +47,37 @@ export default function Header() {
         <div className="flex items-center gap-4 text-sm">
           {session?.user ? (
             <>
-              <Link href="/cart" className="relative hover:text-gray-600">
+              <Link href="/cart" className="relative text-foreground/70 transition-colors hover:text-primary-dark">
                 Cart
                 {cartCount > 0 && (
-                  <span className="absolute -right-3 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[10px] text-white">
+                  <span className="absolute -right-3 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
                     {cartCount}
                   </span>
                 )}
               </Link>
-              <Link href="/account/orders" className="hover:text-gray-600">
+              <Link href="/account/orders" className="text-foreground/70 transition-colors hover:text-primary-dark">
                 Orders
               </Link>
               {(session.user as { role?: string }).role === "ADMIN" && (
-                <Link href="/admin" className="font-medium hover:text-gray-600">
+                <Link href="/admin" className="font-medium text-foreground/70 transition-colors hover:text-primary-dark">
                   Admin
                 </Link>
               )}
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="hover:text-gray-600"
+                className="text-foreground/70 transition-colors hover:text-primary-dark"
               >
                 Sign Out
               </button>
             </>
           ) : (
             <>
-              <Link href="/auth/login" className="hover:text-gray-600">
+              <Link href="/auth/login" className="text-foreground/70 transition-colors hover:text-primary-dark">
                 Sign In
               </Link>
               <Link
                 href="/auth/register"
-                className="rounded bg-black px-3 py-1.5 text-white hover:bg-gray-800"
+                className="rounded-full bg-primary px-4 py-1.5 text-white transition-colors hover:bg-primary-dark"
               >
                 Sign Up
               </Link>
@@ -118,19 +118,19 @@ export default function Header() {
 
       {/* Mobile nav */}
       {menuOpen && (
-        <nav className="border-t border-gray-100 px-4 py-3 md:hidden">
+        <nav className="border-t border-secondary/30 bg-beige px-4 py-3 md:hidden">
           <div className="flex flex-col gap-3 text-sm">
             <Link
               href="/products"
               onClick={() => setMenuOpen(false)}
-              className="hover:text-gray-600"
+              className="text-foreground/70 transition-colors hover:text-primary-dark"
             >
               Products
             </Link>
             <Link
               href="/categories"
               onClick={() => setMenuOpen(false)}
-              className="hover:text-gray-600"
+              className="text-foreground/70 transition-colors hover:text-primary-dark"
             >
               Categories
             </Link>

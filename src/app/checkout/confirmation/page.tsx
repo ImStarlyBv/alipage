@@ -18,9 +18,9 @@ function ConfirmationContent() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-16 text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/20">
         <svg
-          className="h-8 w-8 text-green-600"
+          className="h-8 w-8 text-primary-dark"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -34,13 +34,13 @@ function ConfirmationContent() {
         </svg>
       </div>
 
-      <h1 className="mt-4 text-2xl font-bold">Order Confirmed!</h1>
-      <p className="mt-2 text-gray-600">
+      <h1 className="mt-4 font-heading text-2xl font-bold text-foreground">Order Confirmed!</h1>
+      <p className="mt-2 text-foreground/60">
         Thank you for your purchase. Your order has been placed successfully.
       </p>
 
       {orderId && (
-        <p className="mt-3 text-sm text-gray-500">
+        <p className="mt-3 text-sm text-foreground/50">
           Order ID: <span className="font-mono">{orderId}</span>
         </p>
       )}
@@ -49,14 +49,14 @@ function ConfirmationContent() {
         {orderId && (
           <Link
             href={`/account/orders/${orderId}`}
-            className="rounded bg-black px-6 py-2.5 text-sm font-medium text-white hover:bg-gray-800"
+            className="rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
           >
             View Order
           </Link>
         )}
         <Link
           href="/products"
-          className="rounded border border-gray-300 px-6 py-2.5 text-sm font-medium hover:bg-gray-50"
+          className="rounded-full border border-primary/30 px-6 py-2.5 text-sm font-medium text-primary-dark transition-colors hover:bg-beige"
         >
           Continue Shopping
         </Link>

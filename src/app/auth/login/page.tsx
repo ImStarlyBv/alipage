@@ -46,23 +46,23 @@ function LoginForm() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-sm space-y-6">
+      <div className="w-full max-w-sm space-y-6 rounded-xl bg-beige p-8 shadow-sm">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Sign In</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="font-heading text-2xl font-bold text-foreground">Sign In</h1>
+          <p className="mt-1 text-sm text-foreground/50">
             Enter your credentials to access your account
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-lg bg-secondary/30 p-3 text-sm text-red-700">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className="block text-sm font-medium text-foreground/70">
               Email
             </label>
             <input
@@ -71,12 +71,12 @@ function LoginForm() {
               type="email"
               required
               autoComplete="email"
-              className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:outline-none"
+              className="mt-1 block w-full rounded-lg border border-primary/20 bg-white px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label htmlFor="password" className="block text-sm font-medium text-foreground/70">
               Password
             </label>
             <input
@@ -85,22 +85,22 @@ function LoginForm() {
               type="password"
               required
               autoComplete="current-password"
-              className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:outline-none"
+              className="mt-1 block w-full rounded-lg border border-primary/20 bg-white px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded bg-black py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+            className="w-full rounded-full bg-primary py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-sm text-foreground/50">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/register" className="font-medium text-black hover:underline">
+          <Link href="/auth/register" className="font-medium text-primary-dark hover:underline">
             Create one
           </Link>
         </p>

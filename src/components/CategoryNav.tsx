@@ -27,7 +27,7 @@ export default function CategoryNav() {
         <Link
           key={cat.id}
           href={`/products?categoryId=${cat.id}`}
-          className="rounded-full border border-gray-200 px-3 py-1 text-sm hover:border-black hover:bg-black hover:text-white transition-colors"
+          className="rounded-full bg-beige px-3 py-1 text-sm text-foreground/70 transition-colors hover:bg-primary hover:text-white"
         >
           {cat.name}
         </Link>

@@ -67,34 +67,34 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-8">
-        <p className="text-gray-500">Loading cart...</p>
+        <p className="text-foreground/50">Loading cart...</p>
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="text-3xl font-bold">Shopping Cart</h1>
+      <h1 className="font-heading text-3xl font-bold text-foreground">Shopping Cart</h1>
 
       {items.length === 0 ? (
         <div className="mt-12 text-center">
-          <p className="text-gray-500">Your cart is empty.</p>
+          <p className="text-foreground/50">Your cart is empty.</p>
           <Link
             href="/products"
-            className="mt-4 inline-block rounded bg-black px-6 py-2.5 text-sm font-medium text-white hover:bg-gray-800"
+            className="mt-4 inline-block rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark"
           >
             Continue Shopping
           </Link>
         </div>
       ) : (
         <>
-          <div className="mt-6 divide-y">
+          <div className="mt-6 divide-y divide-secondary/30">
             {items.map((item) => (
               <div
                 key={`${item.productId}:${item.variantId || ""}`}
                 className="flex gap-4 py-4"
               >
-                <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded bg-gray-100">
+                <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-beige">
                   {item.image ? (
                     <Image
                       src={item.image}
@@ -104,7 +104,7 @@ export default function CartPage() {
                       sizes="80px"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center text-xs text-gray-400">
+                    <div className="flex h-full items-center justify-center text-xs text-foreground/30">
                       No img
                     </div>
                   )}
@@ -114,22 +114,22 @@ export default function CartPage() {
                   <div className="flex justify-between">
                     <Link
                       href={`/products/${item.productId}`}
-                      className="text-sm font-medium hover:underline"
+                      className="text-sm font-medium text-foreground hover:text-primary-dark hover:underline"
                     >
                       {item.name}
                     </Link>
-                    <p className="text-sm font-bold">
+                    <p className="text-sm font-bold text-primary-dark">
                       ${(Number(item.unitPrice) * item.quantity).toFixed(2)}
                     </p>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center rounded border text-sm">
+                    <div className="flex items-center rounded-full border border-primary/30 text-sm">
                       <button
                         onClick={() =>
                           updateQuantity(item.productId, item.quantity - 1)
                         }
-                        className="px-2 py-1 hover:bg-gray-50"
+                        className="px-3 py-1 transition-colors hover:bg-primary/10 rounded-l-full"
                       >
                         -
                       </button>
@@ -138,14 +138,14 @@ export default function CartPage() {
                         onClick={() =>
                           updateQuantity(item.productId, item.quantity + 1)
                         }
-                        className="px-2 py-1 hover:bg-gray-50"
+                        className="px-3 py-1 transition-colors hover:bg-primary/10 rounded-r-full"
                       >
                         +
                       </button>
                     </div>
                     <button
                       onClick={() => removeItem(item.productId)}
-                      className="text-xs text-red-600 hover:underline"
+                      className="text-xs text-primary-dark transition-colors hover:text-primary hover:underline"
                     >
                       Remove
                     </button>
@@ -155,17 +155,17 @@ export default function CartPage() {
             ))}
           </div>
 
-          <div className="mt-6 border-t pt-4">
-            <div className="flex justify-between text-lg font-bold">
+          <div className="mt-6 rounded-xl bg-beige p-4">
+            <div className="flex justify-between text-lg font-bold text-foreground">
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span className="text-primary-dark">${subtotal.toFixed(2)}</span>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-foreground/50">
               Shipping calculated at checkout.
             </p>
             <Link
               href="/checkout"
-              className="mt-4 block rounded bg-black py-3 text-center text-sm font-medium text-white hover:bg-gray-800"
+              className="mt-4 block rounded-full bg-primary py-3 text-center text-sm font-medium text-white transition-colors hover:bg-primary-dark"
             >
               Proceed to Checkout
             </Link>

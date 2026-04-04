@@ -41,10 +41,10 @@ export default function AddToCartButton({
 
   return (
     <div className="flex items-center gap-3">
-      <div className="flex items-center rounded border">
+      <div className="flex items-center rounded-full border border-primary/30">
         <button
           onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-          className="px-3 py-2 text-sm hover:bg-gray-50"
+          className="rounded-l-full px-3 py-2 text-sm transition-colors hover:bg-primary/10"
           disabled={disabled}
         >
           -
@@ -52,7 +52,7 @@ export default function AddToCartButton({
         <span className="w-10 text-center text-sm">{quantity}</span>
         <button
           onClick={() => setQuantity((q) => q + 1)}
-          className="px-3 py-2 text-sm hover:bg-gray-50"
+          className="rounded-r-full px-3 py-2 text-sm transition-colors hover:bg-primary/10"
           disabled={disabled}
         >
           +
@@ -61,7 +61,7 @@ export default function AddToCartButton({
       <button
         onClick={handleAdd}
         disabled={disabled || loading}
-        className="flex-1 rounded bg-black px-6 py-2.5 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
+        className="flex-1 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50"
       >
         {loading ? "Adding..." : added ? "Added!" : "Add to Cart"}
       </button>

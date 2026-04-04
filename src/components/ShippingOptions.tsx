@@ -36,7 +36,7 @@ export default function ShippingOptions({ productId }: { productId: string }) {
     return (
       <button
         onClick={loadShipping}
-        className="text-sm text-gray-600 underline hover:text-black"
+        className="text-sm text-primary-dark underline transition-colors hover:text-primary"
       >
         Check shipping options
       </button>
@@ -44,7 +44,7 @@ export default function ShippingOptions({ productId }: { productId: string }) {
   }
 
   if (loading) {
-    return <p className="text-sm text-gray-500">Loading shipping options...</p>;
+    return <p className="text-sm text-foreground/50">Loading shipping options...</p>;
   }
 
   if (error) {
@@ -52,25 +52,25 @@ export default function ShippingOptions({ productId }: { productId: string }) {
   }
 
   if (options && options.length === 0) {
-    return <p className="text-sm text-gray-500">No shipping options available.</p>;
+    return <p className="text-sm text-foreground/50">No shipping options available.</p>;
   }
 
   return (
     <div>
-      <h3 className="text-sm font-medium">Shipping Options</h3>
+      <h3 className="text-sm font-medium text-foreground">Shipping Options</h3>
       <div className="mt-2 space-y-2">
         {options!.map((opt, i) => (
           <div
             key={i}
-            className="flex items-center justify-between rounded border px-3 py-2 text-sm"
+            className="flex items-center justify-between rounded-lg border border-primary/20 bg-white px-3 py-2 text-sm"
           >
             <div>
-              <p className="font-medium">{opt.serviceName}</p>
-              <p className="text-xs text-gray-500">
+              <p className="font-medium text-foreground">{opt.serviceName}</p>
+              <p className="text-xs text-foreground/50">
                 Est. {opt.estimatedDays} days
               </p>
             </div>
-            <p className="font-medium">
+            <p className="font-medium text-primary-dark">
               {Number(opt.cost) === 0
                 ? "Free"
                 : `$${Number(opt.cost).toFixed(2)}`}
