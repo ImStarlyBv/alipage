@@ -32,25 +32,27 @@ export async function createOrder(
   return apiCall(
     "aliexpress.ds.order.create",
     {
-      logistics_address: JSON.stringify({
-        address: address.address,
-        city: address.city,
-        country: address.country,
-        full_name: address.full_name,
-        mobile_no: address.mobile_no,
-        phone_country: address.phone_country,
-        province: address.province,
-        zip: address.zip,
-      }),
-      product_items: JSON.stringify([
-        {
-          logistics_service_name: shippingMethod,
-          order_memo: memo,
-          product_count: quantity,
-          product_id: Number(productId),
-          sku_attr: skuAttr,
+      param_place_order_request4_open_api_d_t_o: JSON.stringify({
+        logistics_address: {
+          address: address.address,
+          city: address.city,
+          country: address.country,
+          full_name: address.full_name,
+          mobile_no: address.mobile_no,
+          phone_country: address.phone_country,
+          province: address.province,
+          zip: address.zip,
         },
-      ]),
+        product_items: [
+          {
+            logistics_service_name: shippingMethod,
+            order_memo: memo,
+            product_count: quantity,
+            product_id: Number(productId),
+            sku_attr: skuAttr,
+          },
+        ],
+      }),
     },
     true
   );
