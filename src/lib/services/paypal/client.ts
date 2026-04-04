@@ -14,7 +14,7 @@ const client = new Client({
     oAuthClientSecret: process.env.PAYPAL_CLIENT_SECRET!,
   },
   environment:
-    process.env.NODE_ENV === "production"
+    process.env.PAYPAL_MODE === "live"
       ? Environment.Production
       : Environment.Sandbox,
 });
