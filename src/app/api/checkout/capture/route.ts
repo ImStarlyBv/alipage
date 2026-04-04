@@ -1,0 +1,122 @@
+// POST /api/checkout/capture — Capture PayPal payment, save order, trigger AE order
+import { prisma } from "@/lib/models";
+import { capturePayPalOrder } from "@/lib/services/paypal/orders";
+import { requireAuth } from "@/lib/auth/session";
+import { placeAEOrder } from "@/lib/services/aliexpress/place-order";
+import type { ShippingAddress } from "@/lib/services/aliexpress/orders";
+
+export async function POST(request: Request) {
+  const user = await requireAuth();
+  if (!user) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const { paypalOrderId, shippingAddress } = body as {
+    paypalOrderId?: string;
+    shippingAddress?: ShippingAddress;
+  };
+
+  if (!paypalOrderId) {
+    return Response.json(
+      { error: "paypalOrderId is required" },
+      { status: 400 }
+    );
+  }
+
+  if (!shippingAddress || !shippingAddress.full_name || !shippingAddress.country) {
+    return Response.json(
+      { error: "Shipping address is required" },
+      { status: 400 }
+    );
+  }
+
+  // Get cart for order items
+  const cart = await prisma.cart.findUnique({ where: { customerId: user.id } });
+
+  if (!cart) {
+    return Response.json({ error: "Cart not found" }, { status: 400 });
+  }
+
+  const cartItems = cart.items as Array<{
+    productId: string;
+    name: string;
+    quantity: number;
+    unitPrice: string;
+    variantId?: string;
+  }>;
+
+  // Capture the PayPal payment
+  let captureResult;
+  try {
+    captureResult = await capturePayPalOrder(paypalOrderId);
+  } catch (err: unknown) {
+    console.error("PayPal capture failed:", err);
+
+    // Check for INSTRUMENT_DECLINED
+    const errorBody =
+      err && typeof err === "object" && "body" in err
+        ? (err as { body: string }).body
+        : null;
+    if (errorBody && typeof errorBody === "string") {
+      try {
+        const parsed = JSON.parse(errorBody);
+        if (
+          parsed?.details?.some(
+            (d: { issue?: string }) => d.issue === "INSTRUMENT_DECLINED"
+          )
+        ) {
+          return Response.json(
+            {
+              error: "Payment method declined",
+              code: "INSTRUMENT_DECLINED",
+            },
+            { status: 422 }
+          );
+        }
+      } catch {
+        // not JSON, ignore
+      }
+    }
+
+    return Response.json(
+      { error: "Payment capture failed" },
+      { status: 500 }
+    );
+  }
+
+  // Calculate total from server-side prices
+  const totalPaid = cartItems.reduce(
+    (sum, i) => sum + parseFloat(i.unitPrice) * i.quantity,
+    0
+  );
+
+  // Save order in DB BEFORE calling AliExpress (rule #4: order always persists)
+  const order = await prisma.order.create({
+    data: {
+      items: cartItems,
+      shippingAddress: JSON.parse(JSON.stringify(shippingAddress)),
+      totalPaid,
+      currency: "USD",
+      paypalTransactionId: paypalOrderId,
+      paypalStatus: captureResult.status,
+      paypalRawResponse: JSON.parse(JSON.stringify(captureResult)),
+      status: "PAID",
+      customerId: user.id,
+    },
+  });
+
+  // Clear the cart after successful payment
+  await prisma.cart.update({
+    where: { id: cart.id },
+    data: { items: [] },
+  });
+
+  // Attempt to create AliExpress order automatically (non-blocking for the response)
+  // If it fails, admin can retry manually from the dashboard
+  placeAEOrder(order.id, cartItems, shippingAddress).catch((err) => {
+    console.error(`AE order creation failed for order ${order.id}:`, err);
+  });
+
+  return Response.json({ orderId: order.id });
+}
