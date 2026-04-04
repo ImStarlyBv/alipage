@@ -4,6 +4,7 @@ import AddToCartButton from "@/components/AddToCartButton";
 import ShippingOptions from "@/components/ShippingOptions";
 import ImageCarousel from "@/components/ImageCarousel";
 import DescriptionGallery from "@/components/DescriptionGallery";
+import StickyCartBar from "@/components/StickyCartBar";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +54,7 @@ export default async function ProductDetailPage({
   }));
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
+    <div className="mx-auto max-w-7xl px-4 pb-20 pt-6 md:pb-8 md:pt-8">
       <div className="grid gap-6 md:grid-cols-2 md:gap-8">
         {/* Image carousel */}
         <ImageCarousel images={images} alt={product.title} />
@@ -122,6 +123,13 @@ export default async function ProductDetailPage({
           </div>
         </div>
       </div>
+
+      {/* Sticky mobile cart bar */}
+      <StickyCartBar
+        productId={product.id}
+        price={price}
+        disabled={product.stock === 0}
+      />
     </div>
   );
 }
