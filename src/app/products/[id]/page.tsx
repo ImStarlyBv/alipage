@@ -31,9 +31,25 @@ export default async function ProductDetailPage({
 
   const images = product.images as string[];
   const price = Number(product.salePrice);
-  const variants = product.variants as
-    | Array<{ id: string; name: string; values: string[] }>
-    | null;
+  // AE SKU variants: group by property name for display
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawSkus = (product.variants as any[] | null) || [];
+  const variantMap = new Map<string, Set<string>>();
+  for (const sku of rawSkus) {
+    const props =
+      sku.ae_sku_property_dtos?.ae_sku_property_d_t_o || [];
+    for (const prop of props) {
+      const name = prop.sku_property_name as string;
+      const value = (prop.property_value_definition_name || prop.sku_property_value) as string;
+      if (!variantMap.has(name)) variantMap.set(name, new Set());
+      variantMap.get(name)!.add(value);
+    }
+  }
+  const variants = Array.from(variantMap.entries()).map(([name, values]) => ({
+    id: name,
+    name,
+    values: Array.from(values),
+  }));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
