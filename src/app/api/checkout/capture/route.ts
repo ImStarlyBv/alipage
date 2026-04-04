@@ -3,6 +3,7 @@ import { prisma } from "@/lib/models";
 import { capturePayPalOrder } from "@/lib/services/paypal/orders";
 import { requireAuth } from "@/lib/auth/session";
 import { placeAEOrder } from "@/lib/services/aliexpress/place-order";
+import { sendOrderConfirmationEmail } from "@/lib/services/email/transactional";
 import type { ShippingAddress } from "@/lib/services/aliexpress/orders";
 
 export async function POST(request: Request) {
@@ -111,6 +112,22 @@ export async function POST(request: Request) {
     where: { id: cart.id },
     data: { items: [] },
   });
+
+  // Send order confirmation email (non-blocking)
+  sendOrderConfirmationEmail({
+    to: user.email!,
+    customerName: user.name || "Customer",
+    orderNumber: order.orderNumber,
+    orderId: order.id,
+    items: cartItems.map((i) => ({
+      name: i.name,
+      quantity: i.quantity,
+      price: parseFloat(i.unitPrice) * i.quantity,
+    })),
+    totalPaid,
+  }).catch((err) =>
+    console.error(`Confirmation email failed for order ${order.id}:`, err)
+  );
 
   // Attempt to create AliExpress order automatically (non-blocking for the response)
   // If it fails, admin can retry manually from the dashboard

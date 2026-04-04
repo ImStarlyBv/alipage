@@ -1,8 +1,19 @@
-// POST /api/admin/products/sync — Sync prices and stock with AliExpress
+// GET /api/cron/sync-products — Periodic price/stock sync with AliExpress
+// Intended to be called by an external cron job (e.g., every 6-12 hours).
+// Protected by a shared secret in the Authorization header.
 import { prisma } from "@/lib/models";
 import { getProduct } from "@/lib/services/aliexpress/products";
 
-export async function POST() {
+const CRON_SECRET = process.env.CRON_SECRET;
+
+export async function GET(request: Request) {
+  if (CRON_SECRET) {
+    const auth = request.headers.get("authorization");
+    if (auth !== `Bearer ${CRON_SECRET}`) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
   const products = await prisma.product.findMany({
     where: { active: true },
     select: { id: true, aliexpressId: true, markup: true },
