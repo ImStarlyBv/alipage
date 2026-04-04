@@ -181,36 +181,33 @@ async function resolveItems(items: OrderItem[]): Promise<ResolvedItem[]> {
       throw new Error(`Product ${item.productId} not found in DB`);
     }
 
-    // Find the variant's sku_attr if variantId is specified
+    // Find the variant's sku_attr
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const variants = (product.variants as any[]) || [];
     let skuAttr = "";
     let skuId = "0";
 
-    if (item.variantId && product.variants) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const variants = product.variants as any[];
-      const variant = variants.find(
+    // Try to match by variantId, or fall back to first SKU
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let variant: any = null;
+    if (item.variantId && variants.length > 0) {
+      variant = variants.find(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (v: any) =>
+          v.sku_id === item.variantId ||
           v.id === item.variantId ||
-          v.ae_sku_id === item.variantId ||
+          String(v.sku_id) === item.variantId ||
           String(v.id) === item.variantId
       );
+    }
+    // Default to first variant if none matched
+    if (!variant && variants.length > 0) {
+      variant = variants[0];
+    }
 
-      if (variant) {
-        skuAttr = variant.sku_attr || variant.ae_sku_property_dtos || "";
-        skuId = String(variant.ae_sku_id || variant.id || "0");
-
-        // If sku_attr is an array of property DTOs, format it
-        if (Array.isArray(skuAttr)) {
-          skuAttr = skuAttr
-            .map(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (p: any) =>
-                `${p.sku_property_id}:${p.sku_property_value}`
-            )
-            .join(";");
-        }
-      }
+    if (variant) {
+      skuAttr = variant.sku_attr || "";
+      skuId = String(variant.sku_id || variant.id || "0");
     }
 
     resolved.push({
