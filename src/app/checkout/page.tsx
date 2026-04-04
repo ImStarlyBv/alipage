@@ -150,11 +150,11 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="font-heading text-3xl font-bold text-foreground">Checkout</h1>
+    <div className="mx-auto max-w-3xl px-4 py-6 md:py-8">
+      <h1 className="font-heading text-2xl font-bold text-foreground sm:text-3xl">Checkout</h1>
 
       {/* Order summary */}
-      <div className="mt-6 rounded-xl bg-beige p-5">
+      <div className="mt-4 rounded-xl bg-beige p-4 sm:mt-6 sm:p-5">
         <h2 className="font-heading text-lg font-semibold text-foreground">Order Summary</h2>
         <div className="mt-3 divide-y divide-secondary/30">
           {items.map((item) => (
@@ -173,8 +173,8 @@ export default function CheckoutPage() {
                   />
                 )}
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">{item.name}</p>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-foreground">{item.name}</p>
                 <p className="text-xs text-foreground/50">Qty: {item.quantity}</p>
               </div>
               <p className="text-sm font-bold text-primary-dark">
@@ -189,7 +189,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Shipping address */}
-      <div className="mt-6 rounded-xl border border-primary/10 bg-white p-5">
+      <div className="mt-4 rounded-xl border border-primary/10 bg-white p-4 sm:mt-6 sm:p-5">
         <h2 className="font-heading text-lg font-semibold text-foreground">Shipping Address</h2>
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
@@ -299,7 +299,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* PayPal payment */}
-      <div className="mt-6 rounded-xl border border-primary/10 bg-white p-5">
+      <div className="mt-4 rounded-xl border border-primary/10 bg-white p-4 sm:mt-6 sm:p-5">
         <h2 className="font-heading text-lg font-semibold text-foreground">Payment</h2>
         {!addressValid && (
           <p className="mt-1 text-sm text-secondary">

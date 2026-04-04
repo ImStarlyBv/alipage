@@ -94,7 +94,7 @@ export default function CartPage() {
                 key={`${item.productId}:${item.variantId || ""}`}
                 className="flex gap-4 py-4"
               >
-                <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-beige">
+                <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-beige sm:h-20 sm:w-20">
                   {item.image ? (
                     <Image
                       src={item.image}
@@ -110,15 +110,15 @@ export default function CartPage() {
                   )}
                 </div>
 
-                <div className="flex flex-1 flex-col justify-between">
-                  <div className="flex justify-between">
+                <div className="flex flex-1 flex-col justify-between min-w-0">
+                  <div className="flex justify-between gap-2">
                     <Link
                       href={`/products/${item.productId}`}
-                      className="text-sm font-medium text-foreground hover:text-primary-dark hover:underline"
+                      className="truncate text-sm font-medium text-foreground hover:text-primary-dark hover:underline"
                     >
                       {item.name}
                     </Link>
-                    <p className="text-sm font-bold text-primary-dark">
+                    <p className="flex-shrink-0 text-sm font-bold text-primary-dark">
                       ${(Number(item.unitPrice) * item.quantity).toFixed(2)}
                     </p>
                   </div>

@@ -40,7 +40,7 @@ export default function AddToCartButton({
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
       <div className="flex items-center rounded-full border border-primary/30">
         <button
           onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -61,7 +61,7 @@ export default function AddToCartButton({
       <button
         onClick={handleAdd}
         disabled={disabled || loading}
-        className="flex-1 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50"
+        className="w-full rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-dark disabled:opacity-50 sm:flex-1 sm:w-auto"
       >
         {loading ? "Adding..." : added ? "Added!" : "Add to Cart"}
       </button>

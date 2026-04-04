@@ -27,22 +27,22 @@ export default function DescriptionGallery({ html }: DescriptionGalleryProps) {
   }, [html]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Text content */}
       {textHtml && textHtml.replace(/<[^>]*>/g, "").trim().length > 0 && (
         <div
-          className="prose prose-sm max-w-none text-foreground/70 leading-relaxed"
+          className="prose prose-sm max-w-none overflow-hidden break-words text-foreground/70 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: textHtml }}
         />
       )}
 
       {/* Image gallery */}
       {images.length > 0 && (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2 sm:gap-3">
           {images.map((src, i) => (
             <div
               key={i}
-              className="relative overflow-hidden rounded-xl bg-beige shadow-sm"
+              className="relative overflow-hidden rounded-lg bg-beige shadow-sm sm:rounded-xl"
             >
               <Image
                 src={src}
@@ -50,7 +50,7 @@ export default function DescriptionGallery({ html }: DescriptionGalleryProps) {
                 width={600}
                 height={600}
                 className="h-auto w-full object-contain"
-                sizes="(max-width: 640px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           ))}

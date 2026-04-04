@@ -27,9 +27,9 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-secondary/40 bg-cream shadow-sm">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:h-16">
         {/* Logo */}
-        <Link href="/" className="font-heading text-2xl font-bold tracking-tight text-primary-dark">
+        <Link href="/" className="font-heading text-xl font-bold tracking-tight text-primary-dark md:text-2xl">
           Clevver
         </Link>
 
@@ -43,8 +43,8 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* Right side */}
-        <div className="flex items-center gap-4 text-sm">
+        {/* Right side - desktop */}
+        <div className="hidden items-center gap-4 text-sm md:flex">
           {session?.user ? (
             <>
               <Link href="/cart" className="relative text-foreground/70 transition-colors hover:text-primary-dark">
@@ -83,15 +83,28 @@ export default function Header() {
               </Link>
             </>
           )}
+        </div>
 
-          {/* Mobile menu toggle */}
+        {/* Mobile right side */}
+        <div className="flex items-center gap-3 md:hidden">
+          {session?.user && (
+            <Link href="/cart" className="relative text-foreground/70">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
+              </svg>
+              {cartCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-white">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          )}
           <button
-            className="md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
             <svg
-              className="h-5 w-5"
+              className="h-6 w-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -118,7 +131,7 @@ export default function Header() {
 
       {/* Mobile nav */}
       {menuOpen && (
-        <nav className="border-t border-secondary/30 bg-beige px-4 py-3 md:hidden">
+        <nav className="border-t border-secondary/30 bg-beige px-4 py-4 md:hidden">
           <div className="flex flex-col gap-3 text-sm">
             <Link
               href="/products"
@@ -134,6 +147,62 @@ export default function Header() {
             >
               Categories
             </Link>
+
+            {session?.user ? (
+              <>
+                <div className="border-t border-secondary/30 pt-3" />
+                <Link
+                  href="/cart"
+                  onClick={() => setMenuOpen(false)}
+                  className="text-foreground/70 transition-colors hover:text-primary-dark"
+                >
+                  Cart {cartCount > 0 && `(${cartCount})`}
+                </Link>
+                <Link
+                  href="/account/orders"
+                  onClick={() => setMenuOpen(false)}
+                  className="text-foreground/70 transition-colors hover:text-primary-dark"
+                >
+                  My Orders
+                </Link>
+                {(session.user as { role?: string }).role === "ADMIN" && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMenuOpen(false)}
+                    className="font-medium text-foreground/70 transition-colors hover:text-primary-dark"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    signOut({ callbackUrl: "/" });
+                  }}
+                  className="text-left text-foreground/70 transition-colors hover:text-primary-dark"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="border-t border-secondary/30 pt-3" />
+                <Link
+                  href="/auth/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="text-foreground/70 transition-colors hover:text-primary-dark"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-block w-full rounded-full bg-primary py-2 text-center text-white transition-colors hover:bg-primary-dark"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       )}

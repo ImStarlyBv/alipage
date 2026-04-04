@@ -62,8 +62,8 @@ export default function RegisterPage() {
     "mt-1 block w-full rounded-lg border border-primary/20 bg-white px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30";
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-sm space-y-6 rounded-xl bg-beige p-8 shadow-sm">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8">
+      <div className="w-full max-w-sm space-y-5 rounded-xl bg-beige p-6 shadow-sm sm:space-y-6 sm:p-8">
         <div className="text-center">
           <h1 className="font-heading text-2xl font-bold text-foreground">Create Account</h1>
           <p className="mt-1 text-sm text-foreground/50">

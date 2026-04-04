@@ -45,8 +45,8 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-sm space-y-6 rounded-xl bg-beige p-8 shadow-sm">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8">
+      <div className="w-full max-w-sm space-y-5 rounded-xl bg-beige p-6 shadow-sm sm:space-y-6 sm:p-8">
         <div className="text-center">
           <h1 className="font-heading text-2xl font-bold text-foreground">Sign In</h1>
           <p className="mt-1 text-sm text-foreground/50">

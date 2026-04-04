@@ -53,8 +53,8 @@ export default async function ProductDetailPage({
   }));
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <div className="grid gap-8 md:grid-cols-2">
+    <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
+      <div className="grid gap-6 md:grid-cols-2 md:gap-8">
         {/* Image carousel */}
         <ImageCarousel images={images} alt={product.title} />
 
@@ -65,10 +65,10 @@ export default async function ProductDetailPage({
               {product.category.name}
             </span>
           )}
-          <h1 className="mt-2 font-heading text-2xl font-bold text-foreground md:text-3xl">
+          <h1 className="mt-2 font-heading text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
             {product.title}
           </h1>
-          <p className="mt-3 text-3xl font-bold text-primary-dark">
+          <p className="mt-2 text-2xl font-bold text-primary-dark sm:mt-3 sm:text-3xl">
             ${price.toFixed(2)}
           </p>
 

@@ -49,19 +49,19 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
           <>
             <button
               onClick={goPrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 opacity-0 shadow-md transition-opacity group-hover:opacity-100 hover:bg-white"
+              className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-1.5 shadow-md transition-opacity hover:bg-white md:p-2 md:opacity-0 md:group-hover:opacity-100"
               aria-label="Previous image"
             >
-              <svg className="h-5 w-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 text-foreground md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button
               onClick={goNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 opacity-0 shadow-md transition-opacity group-hover:opacity-100 hover:bg-white"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-1.5 shadow-md transition-opacity hover:bg-white md:p-2 md:opacity-0 md:group-hover:opacity-100"
               aria-label="Next image"
             >
-              <svg className="h-5 w-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4 text-foreground md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -89,12 +89,12 @@ export default function ImageCarousel({ images, alt }: ImageCarouselProps) {
 
       {/* Thumbnail strip */}
       {images.length > 1 && (
-        <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+        <div className="mt-2 flex gap-1.5 overflow-x-auto pb-1 md:mt-3 md:gap-2">
           {images.map((img, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
-              className={`relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg transition-all ${
+              className={`relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md transition-all sm:h-14 sm:w-14 md:h-16 md:w-16 md:rounded-lg ${
                 i === activeIndex
                   ? "ring-2 ring-primary ring-offset-1"
                   : "opacity-60 hover:opacity-100"

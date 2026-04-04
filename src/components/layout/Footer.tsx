@@ -3,8 +3,8 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="mt-auto bg-primary">
-      <div className="mx-auto max-w-7xl px-4 py-10">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-4 py-8 md:py-10">
+        <div className="grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4">
           <div>
             <h3 className="text-sm font-semibold text-white">Shop</h3>
             <ul className="mt-3 space-y-2 text-sm text-white/70">
