@@ -2,6 +2,7 @@
 // DELETE /api/cart/[itemId] — Remove item from cart
 import { prisma } from "@/lib/models";
 import { requireAuth } from "@/lib/auth/session";
+import { validateBody, updateCartItemSchema } from "@/lib/utils/validation";
 import type { NextRequest } from "next/server";
 
 type CartItem = {
@@ -24,15 +25,9 @@ export async function PUT(
   ctx: { params: Promise<{ itemId: string }> }
 ) {
   const { itemId } = await ctx.params;
-  const body = await req.json();
-  const quantity = body.quantity;
-
-  if (!quantity || quantity < 1) {
-    return Response.json(
-      { error: "quantity (>= 1) is required" },
-      { status: 400 }
-    );
-  }
+  const { data, error } = await validateBody(req, updateCartItemSchema);
+  if (error) return error;
+  const { quantity } = data;
 
   const cart = await getCart();
   if (!cart) {

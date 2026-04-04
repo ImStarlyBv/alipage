@@ -1,17 +1,16 @@
 // POST /api/admin/products/import — Import product from AliExpress by ID
 import { prisma } from "@/lib/models";
 import { getProduct } from "@/lib/services/aliexpress/products";
+import { validateBody, importProductSchema } from "@/lib/utils/validation";
+import { handleApiError } from "@/lib/utils/api-error";
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const { aliexpressId, markup = 1.5 } = body;
+  const { data, error } = await validateBody(request, importProductSchema);
+  if (error) return error;
 
-  if (!aliexpressId) {
-    return Response.json(
-      { error: "aliexpressId is required" },
-      { status: 400 }
-    );
-  }
+  const { aliexpressId, markup } = data;
+
+  try {
 
   // Check if product already imported
   const existing = await prisma.product.findUnique({
@@ -85,4 +84,7 @@ export async function POST(request: Request) {
   });
 
   return Response.json({ product }, { status: 201 });
+  } catch (err) {
+    return handleApiError(err, "POST /api/admin/products/import");
+  }
 }

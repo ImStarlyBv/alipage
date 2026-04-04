@@ -1,5 +1,6 @@
 // POST /api/admin/orders/[id]/complete-manual — Mark order as manually completed
 import { prisma } from "@/lib/models";
+import { validateBody, completeManualSchema } from "@/lib/utils/validation";
 import type { NextRequest } from "next/server";
 
 export async function POST(
@@ -7,8 +8,10 @@ export async function POST(
   ctx: { params: Promise<{ id: string }> }
 ) {
   const { id } = await ctx.params;
-  const body = await req.json();
-  const { aliexpressOrderId, trackingNumber } = body;
+  const { data, error } = await validateBody(req, completeManualSchema);
+  if (error) return error;
+
+  const { aliexpressOrderId, trackingNumber } = data;
 
   const order = await prisma.order.findUnique({ where: { id } });
   if (!order) {

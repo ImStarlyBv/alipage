@@ -2,6 +2,8 @@
 import { prisma } from "@/lib/models";
 import { refundCapture } from "@/lib/services/paypal/refunds";
 import { requireAdmin } from "@/lib/auth/session";
+import { validateBody, refundSchema } from "@/lib/utils/validation";
+import { handleApiError } from "@/lib/utils/api-error";
 
 export async function POST(request: Request) {
   const admin = await requireAdmin();
@@ -9,38 +11,36 @@ export async function POST(request: Request) {
     return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const body = await request.json();
-  const { orderId, amount } = body;
+  const { data, error } = await validateBody(request, refundSchema);
+  if (error) return error;
 
-  if (!orderId) {
-    return Response.json({ error: "orderId is required" }, { status: 400 });
-  }
-
-  const order = await prisma.order.findUnique({ where: { id: orderId } });
-  if (!order) {
-    return Response.json({ error: "Order not found" }, { status: 404 });
-  }
-
-  // Extract capture ID from the raw PayPal response
-  const rawResponse = order.paypalRawResponse as {
-    purchase_units?: Array<{
-      payments?: {
-        captures?: Array<{ id: string }>;
-      };
-    }>;
-  };
-  const captureId =
-    rawResponse?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
-
-  if (!captureId) {
-    return Response.json(
-      { error: "No capture found for this order" },
-      { status: 400 }
-    );
-  }
+  const { orderId, amount } = data;
 
   try {
-    const refundResult = await refundCapture(captureId, amount);
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    if (!order) {
+      return Response.json({ error: "Order not found" }, { status: 404 });
+    }
+
+    // Extract capture ID from the raw PayPal response
+    const rawResponse = order.paypalRawResponse as {
+      purchase_units?: Array<{
+        payments?: {
+          captures?: Array<{ id: string }>;
+        };
+      }>;
+    };
+    const captureId =
+      rawResponse?.purchase_units?.[0]?.payments?.captures?.[0]?.id;
+
+    if (!captureId) {
+      return Response.json(
+        { error: "No capture found for this order" },
+        { status: 400 }
+      );
+    }
+
+    const refundResult = await refundCapture(captureId, amount?.toString());
 
     await prisma.order.update({
       where: { id: orderId },
@@ -52,7 +52,6 @@ export async function POST(request: Request) {
 
     return Response.json({ refund: refundResult });
   } catch (err) {
-    console.error("Refund failed:", err);
-    return Response.json({ error: "Refund failed" }, { status: 500 });
+    return handleApiError(err, "POST /api/checkout/refund");
   }
 }

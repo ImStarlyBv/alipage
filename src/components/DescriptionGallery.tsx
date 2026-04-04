@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import DOMPurify from "isomorphic-dompurify";
 import Image from "next/image";
 
 interface DescriptionGalleryProps {
@@ -23,7 +24,12 @@ export default function DescriptionGallery({ html }: DescriptionGalleryProps) {
       .replace(/<br\s*\/?>\s*<br\s*\/?>/gi, "<br/>")
       .trim();
 
-    return { images: extractedImages, textHtml: cleanedHtml };
+    const sanitized = DOMPurify.sanitize(cleanedHtml, {
+      ALLOWED_TAGS: ["p", "br", "b", "strong", "i", "em", "ul", "ol", "li", "span", "div", "h1", "h2", "h3", "h4", "h5", "h6", "a", "table", "tr", "td", "th", "tbody", "thead"],
+      ALLOWED_ATTR: ["href", "target", "rel", "style"],
+    });
+
+    return { images: extractedImages, textHtml: sanitized };
   }, [html]);
 
   return (

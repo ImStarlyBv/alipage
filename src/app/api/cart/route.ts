@@ -2,6 +2,8 @@
 // GET  /api/cart — Get current cart
 import { prisma } from "@/lib/models";
 import { requireAuth } from "@/lib/auth/session";
+import { validateBody, addToCartSchema } from "@/lib/utils/validation";
+import { handleApiError } from "@/lib/utils/api-error";
 
 async function getOrCreateCart() {
   const user = await requireAuth();
@@ -25,21 +27,11 @@ export async function GET() {
   return Response.json({ items: cart.items });
 }
 
-interface AddItemBody {
-  productId: string;
-  variantId?: string;
-  quantity: number;
-}
-
 export async function POST(request: Request) {
-  const body: AddItemBody = await request.json();
+  const { data: body, error } = await validateBody(request, addToCartSchema);
+  if (error) return error;
 
-  if (!body.productId || !body.quantity || body.quantity < 1) {
-    return Response.json(
-      { error: "productId and quantity (>= 1) are required" },
-      { status: 400 }
-    );
-  }
+  try {
 
   // Verify product exists and is active
   const product = await prisma.product.findUnique({
@@ -93,4 +85,7 @@ export async function POST(request: Request) {
   });
 
   return Response.json({ items });
+  } catch (err) {
+    return handleApiError(err, "POST /api/cart");
+  }
 }

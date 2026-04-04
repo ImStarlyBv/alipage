@@ -4,6 +4,9 @@ import { capturePayPalOrder } from "@/lib/services/paypal/orders";
 import { requireAuth } from "@/lib/auth/session";
 import { placeAEOrder } from "@/lib/services/aliexpress/place-order";
 import { sendOrderConfirmationEmail } from "@/lib/services/email/transactional";
+import { rateLimit } from "@/lib/utils/rate-limit";
+import { validateBody, captureCheckoutSchema } from "@/lib/utils/validation";
+import { handleApiError } from "@/lib/utils/api-error";
 import type { ShippingAddress } from "@/lib/services/aliexpress/orders";
 
 export async function POST(request: Request) {
@@ -12,25 +15,19 @@ export async function POST(request: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
-  const { paypalOrderId, shippingAddress } = body as {
-    paypalOrderId?: string;
-    shippingAddress?: ShippingAddress;
+  // Rate limit: 10 captures per minute per IP
+  const limited = rateLimit(request, { limit: 10, windowSeconds: 60 });
+  if (limited) return limited;
+
+  const { data, error } = await validateBody(request, captureCheckoutSchema);
+  if (error) return error;
+
+  const { paypalOrderId, shippingAddress } = data as {
+    paypalOrderId: string;
+    shippingAddress: ShippingAddress;
   };
 
-  if (!paypalOrderId) {
-    return Response.json(
-      { error: "paypalOrderId is required" },
-      { status: 400 }
-    );
-  }
-
-  if (!shippingAddress || !shippingAddress.full_name || !shippingAddress.country) {
-    return Response.json(
-      { error: "Shipping address is required" },
-      { status: 400 }
-    );
-  }
+  try {
 
   // Get cart for order items
   const cart = await prisma.cart.findUnique({ where: { customerId: user.id } });
@@ -136,4 +133,7 @@ export async function POST(request: Request) {
   });
 
   return Response.json({ orderId: order.id });
+  } catch (err) {
+    return handleApiError(err, "POST /api/checkout/capture");
+  }
 }
