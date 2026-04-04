@@ -252,9 +252,11 @@ export default function CheckoutPage() {
               value={shippingAddress.country}
               onChange={(e) => {
                 const code = e.target.value;
-                updateAddress("country", code);
                 const match = COUNTRIES.find((c) => c.code === code);
-                if (match) updateAddress("phone_country", match.phone);
+                const updated = { ...shippingAddress, country: code, phone_country: match?.phone || shippingAddress.phone_country };
+                setShippingAddress(updated);
+                const required: (keyof ShippingAddress)[] = ["full_name", "mobile_no", "address", "city", "country", "zip"];
+                setAddressValid(required.every((k) => updated[k].trim().length > 0));
               }}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
             >
