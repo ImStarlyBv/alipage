@@ -2,8 +2,18 @@
 
 import { FormEvent, useState } from "react";
 
+function extractProductId(input: string): string {
+  const trimmed = input.trim();
+  // If it's just digits, return as-is
+  if (/^\d+$/.test(trimmed)) return trimmed;
+  // Try to extract from URL: /item/1234567890.html or /item/1234567890
+  const match = trimmed.match(/\/item\/(\d+)/);
+  return match ? match[1] : trimmed;
+}
+
 export default function AdminImportPage() {
-  const [aliexpressId, setAliexpressId] = useState("");
+  const [rawInput, setRawInput] = useState("");
+  const aliexpressId = extractProductId(rawInput);
   const [markup, setMarkup] = useState("1.5");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{
@@ -21,7 +31,7 @@ export default function AdminImportPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          aliexpressId: aliexpressId.trim(),
+          aliexpressId,
           markup: parseFloat(markup),
         }),
       });
@@ -33,7 +43,7 @@ export default function AdminImportPage() {
           success: true,
           message: `Product "${data.product.title}" imported successfully!`,
         });
-        setAliexpressId("");
+        setRawInput("");
       } else {
         setResult({
           success: false,
@@ -51,23 +61,28 @@ export default function AdminImportPage() {
     <div>
       <h2 className="text-2xl font-bold">Import Product</h2>
       <p className="mt-1 text-sm text-gray-500">
-        Import a product from AliExpress by entering its product ID.
+        Paste an AliExpress product link or ID to import it.
       </p>
 
       <form onSubmit={handleSubmit} className="mt-6 max-w-md space-y-4">
         <div>
           <label htmlFor="aliexpressId" className="block text-sm font-medium">
-            AliExpress Product ID
+            AliExpress Product Link or ID
           </label>
           <input
             id="aliexpressId"
             type="text"
-            value={aliexpressId}
-            onChange={(e) => setAliexpressId(e.target.value)}
+            value={rawInput}
+            onChange={(e) => setRawInput(e.target.value)}
             required
-            placeholder="e.g. 1005006123456789"
+            placeholder="e.g. https://www.aliexpress.com/item/1005006123456789.html"
             className="mt-1 block w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-black focus:outline-none"
           />
+          {rawInput && aliexpressId && (
+            <p className="mt-1 text-xs text-gray-500">
+              Product ID: {aliexpressId}
+            </p>
+          )}
         </div>
 
         <div>
