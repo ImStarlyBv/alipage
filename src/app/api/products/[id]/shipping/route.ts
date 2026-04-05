@@ -31,9 +31,7 @@ export async function GET(
     result = await queryShipping(
       product.aliexpressId,
       skuId,
-      country,
-      1,
-      product.salePrice.toString()
+      country
     );
   } catch {
     return Response.json(
@@ -42,15 +40,38 @@ export async function GET(
     );
   }
 
-  // Return only the processed shipping options
   const freightResult =
     result?.aliexpress_ds_freight_query_response?.result;
-  const freightList = freightResult?.freight_list || [];
-  const options = freightList.map(
-    (opt: { service_name: string; estimated_delivery_time: string; freight: { cent: number; currency: string } }) => ({
-      serviceName: opt.service_name,
-      estimatedDelivery: opt.estimated_delivery_time,
-      cost: opt.freight,
+
+  if (!freightResult?.success) {
+    return Response.json({ options: [] });
+  }
+
+  const deliveryOptions =
+    freightResult?.delivery_options?.delivery_option_d_t_o || [];
+
+  const options = deliveryOptions.map(
+    (opt: {
+      company: string;
+      shipping_fee_cent: string;
+      shipping_fee_currency: string;
+      shipping_fee_format: string;
+      min_delivery_days: number;
+      max_delivery_days: number;
+      delivery_date_desc: string;
+      free_shipping: boolean;
+      tracking: boolean;
+      code: string;
+    }) => ({
+      serviceName: opt.company,
+      code: opt.code,
+      cost: opt.free_shipping ? 0 : parseFloat(opt.shipping_fee_cent || "0"),
+      costFormatted: opt.free_shipping ? "Free" : opt.shipping_fee_format,
+      currency: opt.shipping_fee_currency,
+      deliveryDays: `${opt.min_delivery_days}-${opt.max_delivery_days}`,
+      deliveryDate: opt.delivery_date_desc,
+      freeShipping: opt.free_shipping,
+      tracking: opt.tracking,
     })
   );
 

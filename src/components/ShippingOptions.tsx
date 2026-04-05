@@ -4,9 +4,12 @@ import { useState } from "react";
 
 interface ShippingOption {
   serviceName: string;
-  estimatedDays: string;
-  cost: string;
-  currency: string;
+  cost: number;
+  costFormatted: string;
+  deliveryDays: string;
+  deliveryDate: string;
+  freeShipping: boolean;
+  tracking: boolean;
 }
 
 export default function ShippingOptions({ productId }: { productId: string }) {
@@ -67,13 +70,12 @@ export default function ShippingOptions({ productId }: { productId: string }) {
             <div>
               <p className="font-medium text-foreground">{opt.serviceName}</p>
               <p className="text-xs text-foreground/50">
-                Est. {opt.estimatedDays} days
+                {opt.deliveryDate || `${opt.deliveryDays} days`}
+                {opt.tracking && " · Tracked"}
               </p>
             </div>
             <p className="font-medium text-primary-dark">
-              {Number(opt.cost) === 0
-                ? "Free"
-                : `$${Number(opt.cost).toFixed(2)}`}
+              {opt.freeShipping ? "Free" : opt.costFormatted}
             </p>
           </div>
         ))}

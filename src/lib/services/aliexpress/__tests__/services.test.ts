@@ -54,23 +54,19 @@ describe("shipping", () => {
   beforeEach(() => mockApiCall.mockClear());
 
   it("queryShipping sends camelCase queryDeliveryReq JSON", async () => {
-    await queryShipping("123", "sku-456", "US", 2, "15.00", "USD");
+    await queryShipping("123", "sku-456", "US", 2);
 
     const [method, params, auth] = mockApiCall.mock.calls[0];
     expect(method).toBe("aliexpress.ds.freight.query");
     expect(auth).toBe(true);
 
     const req = JSON.parse(params.queryDeliveryReq);
-    expect(req.productId).toBe(123);
+    expect(req.productId).toBe("123");
     expect(req.selectedSkuId).toBe("sku-456");
     expect(req.shipToCountry).toBe("US");
-    expect(req.quantity).toBe(2);
-    expect(req.sendGoodsCountryCode).toBe("CN");
-
-    // Top-level duplicates
-    expect(params.currency).toBe("USD");
-    expect(params.locale).toBe("en_US");
-    expect(params.language).toBe("en");
+    expect(req.quantity).toBe("2");
+    expect(req.currency).toBe("USD");
+    expect(req.locale).toBe("en_US");
   });
 });
 
