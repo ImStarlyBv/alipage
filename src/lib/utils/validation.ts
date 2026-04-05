@@ -48,6 +48,12 @@ export const importProductSchema = z.object({
   markup: z.number().min(1).max(10).optional().default(1.5),
 });
 
+export const updateProductSchema = z.object({
+  salePrice: z.number().positive("Price must be positive").optional(),
+  markup: z.number().min(1).max(10).optional(),
+  active: z.boolean().optional(),
+});
+
 export const completeManualSchema = z.object({
   aliexpressOrderId: z.string().optional(),
   trackingNumber: z.string().optional(),
