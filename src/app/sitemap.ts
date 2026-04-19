@@ -1,9 +1,12 @@
 import type { MetadataRoute } from "next";
+import { prisma } from "@/lib/models";
 
 const SITE_URL = "https://kittycontrol.shop";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
       lastModified: new Date(),
@@ -16,5 +19,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/categories`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
   ];
+
+  let productPages: MetadataRoute.Sitemap = [];
+  try {
+    const products = await prisma.product.findMany({
+      where: { active: true },
+      select: { id: true, updatedAt: true, images: true },
+    });
+
+    productPages = products.map((product) => {
+      const images = Array.isArray(product.images)
+        ? (product.images as string[]).filter((u) => typeof u === "string")
+        : [];
+      return {
+        url: `${SITE_URL}/products/${product.id}`,
+        lastModified: product.updatedAt,
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+        images: images.slice(0, 5),
+      };
+    });
+  } catch (err) {
+    console.error("[sitemap] failed to load products:", err);
+  }
+
+  return [...staticPages, ...productPages];
 }
