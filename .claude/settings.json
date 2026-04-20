@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "kittycontrol-seo": {
+      "command": "node",
+      "args": ["C:/Users/l_urb/Downloads/aliexpres/store/mcp-server/index.js"]
+    }
+  }
+}
