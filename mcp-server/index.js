@@ -163,12 +163,8 @@ server.tool(
         "This is a product photo. If there is an animal in the image, replace it with a cute cat in the exact same pose, position, and scale. If there is no animal, naturally add a cute cat to the scene. Keep all product details, background, lighting, and composition identical. The result must look like a professional product photo."
       )
       .describe("Transformation prompt for the AI model"),
-    resolution: z
-      .enum(["720P", "1080P", "2K", "4K"])
-      .default("1080P")
-      .describe("Output resolution"),
   },
-  async ({ image_url, prompt, resolution }) => {
+  async ({ image_url, prompt }) => {
     // Proxy through R2 so kie.ai can reach it (AliExpress CDN is blocked)
     const proxied = await uploadToR2(image_url).catch(() => image_url);
     // 1. Create the task
@@ -185,7 +181,6 @@ server.tool(
           input_urls: [proxied],
           n: 1,
           enable_sequential: false,
-          resolution,
           thinking_mode: false,
           watermark: false,
           seed: 0,
@@ -285,7 +280,6 @@ server.tool(
             input_urls: [proxied],
             n: 1,
             enable_sequential: false,
-            resolution: "1080P",
             thinking_mode: false,
             watermark: false,
             seed: 0,
