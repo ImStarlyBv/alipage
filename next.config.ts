@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.aliexpress.com",
       },
+      {
+        protocol: "https",
+        hostname: "images.kittycontrol.shop",
+      },
     ],
   },
 };
