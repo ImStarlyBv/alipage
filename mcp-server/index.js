@@ -160,7 +160,7 @@ server.tool(
     prompt: z
       .string()
       .default(
-        "Transform this product photo into a professional, high-quality original image. Keep the same product, composition, lighting angle, and overall style, but make it look like a fresh original product photo with clean background, sharp details, and professional studio quality."
+        "This is a product photo. If there is an animal in the image, replace it with a cute cat in the exact same pose, position, and scale. If there is no animal, naturally add a cute cat to the scene. Keep all product details, background, lighting, and composition identical. The result must look like a professional product photo."
       )
       .describe("Transformation prompt for the AI model"),
     resolution: z
@@ -169,6 +169,8 @@ server.tool(
       .describe("Output resolution"),
   },
   async ({ image_url, prompt, resolution }) => {
+    // Proxy through R2 so kie.ai can reach it (AliExpress CDN is blocked)
+    const proxied = await uploadToR2(image_url).catch(() => image_url);
     // 1. Create the task
     const createRes = await fetch(`${KIE_BASE_URL}/jobs/createTask`, {
       method: "POST",
@@ -180,7 +182,7 @@ server.tool(
         model: "wan/2-7-image",
         input: {
           prompt,
-          input_urls: [image_url],
+          input_urls: [proxied],
           n: 1,
           enable_sequential: false,
           resolution,
@@ -267,6 +269,8 @@ server.tool(
     const results = [];
 
     for (const image_url of image_urls) {
+      // Proxy through R2 so kie.ai can reach it (AliExpress CDN is blocked)
+      const proxied = await uploadToR2(image_url).catch(() => image_url);
       // Create task
       const createRes = await fetch(`${KIE_BASE_URL}/jobs/createTask`, {
         method: "POST",
@@ -278,7 +282,7 @@ server.tool(
           model: "wan/2-7-image",
           input: {
             prompt,
-            input_urls: [image_url],
+            input_urls: [proxied],
             n: 1,
             enable_sequential: false,
             resolution: "1080P",
@@ -369,6 +373,8 @@ server.tool(
 // ─── Bulk transform ───────────────────────────────────────────────────────────
 
 async function transformOneImage(imageUrl, prompt) {
+  // Proxy through R2 so kie.ai can reach it (AliExpress CDN is blocked)
+  const proxied = await uploadToR2(imageUrl).catch(() => imageUrl);
   const createRes = await fetch(`${KIE_BASE_URL}/jobs/createTask`, {
     method: "POST",
     headers: {
@@ -379,7 +385,7 @@ async function transformOneImage(imageUrl, prompt) {
       model: "wan/2-7-image",
       input: {
         prompt,
-        input_urls: [imageUrl],
+        input_urls: [proxied],
         n: 1,
         enable_sequential: false,
         resolution: "1080P",
@@ -428,7 +434,7 @@ server.tool(
     prompt: z
       .string()
       .default(
-        "Transform this product photo into a professional, high-quality original image. Keep the same product, composition, lighting angle, and overall style, but make it look like a fresh original product photo with clean background, sharp details, and professional studio quality."
+        "This is a product photo. If there is an animal in the image, replace it with a cute cat in the exact same pose, position, and scale. If there is no animal, naturally add a cute cat to the scene. Keep all product details, background, lighting, and composition identical. The result must look like a professional product photo."
       )
       .describe("Transformation prompt applied to every image"),
     max_images_per_product: z
