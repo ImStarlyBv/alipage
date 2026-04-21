@@ -382,7 +382,6 @@ async function transformOneImage(imageUrl, prompt) {
         input_urls: [proxied],
         n: 1,
         enable_sequential: false,
-        resolution: "1080P",
         thinking_mode: false,
         watermark: false,
         seed: 0,
