@@ -2,6 +2,7 @@ import { prisma } from "@/lib/models";
 import ProductCard from "@/components/ProductCard";
 import CategoryNav from "@/components/CategoryNav";
 import Link from "next/link";
+import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export default async function ProductsPage({
     ...(categoryId ? { categoryId } : {}),
   };
 
-  const [products, total] = await Promise.all([
+  const [products, total, slugProducts] = await Promise.all([
     prisma.product.findMany({
       where,
       skip: (page - 1) * limit,
@@ -35,7 +36,20 @@ export default async function ProductsPage({
       },
     }),
     prisma.product.count({ where }),
+    prisma.product.findMany({
+      where: { active: true },
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      select: {
+        id: true,
+        title: true,
+      },
+    }),
   ]);
+  const slugMap = buildProductSlugMap(slugProducts);
+  const productsWithSlugs = products.map((product) => ({
+    ...product,
+    slug: slugMap.get(product.id) || product.id,
+  }));
 
   const totalPages = Math.ceil(total / limit);
 
@@ -54,7 +68,7 @@ export default async function ProductsPage({
       ) : (
         <>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-            {products.map((product) => (
+            {productsWithSlugs.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

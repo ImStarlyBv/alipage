@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface Order {
@@ -52,11 +52,7 @@ export default function AdminOrdersPage() {
     tracking: string;
   } | null>(null);
 
-  useEffect(() => {
-    loadOrders();
-  }, [statusFilter]);
-
-  async function loadOrders() {
+  const loadOrders = useCallback(async () => {
     setLoading(true);
     const url = statusFilter
       ? `/api/admin/orders?status=${statusFilter}`
@@ -65,7 +61,11 @@ export default function AdminOrdersPage() {
     const data = await res.json();
     setOrders(data.orders || []);
     setLoading(false);
-  }
+  }, [statusFilter]);
+
+  useEffect(() => {
+    void Promise.resolve().then(loadOrders);
+  }, [loadOrders]);
 
   async function retryOrder(orderId: string) {
     setActionLoading(orderId);

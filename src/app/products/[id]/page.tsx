@@ -1,10 +1,12 @@
 import { prisma } from "@/lib/models";
 import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import AddToCartButton from "@/components/AddToCartButton";
 import ShippingOptions from "@/components/ShippingOptions";
 import ImageCarousel from "@/components/ImageCarousel";
 import DescriptionGallery from "@/components/DescriptionGallery";
 import StickyCartBar from "@/components/StickyCartBar";
+import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 
 export const dynamic = "force-dynamic";
 
@@ -13,10 +15,30 @@ export default async function ProductDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: identifier } = await params;
+  const slugProducts = await prisma.product.findMany({
+    where: { active: true },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: {
+      id: true,
+      title: true,
+    },
+  });
+  const slugMap = buildProductSlugMap(slugProducts);
+  const matchedProduct = slugProducts.find(
+    (product) =>
+      product.id === identifier || slugMap.get(product.id) === identifier
+  );
+
+  if (!matchedProduct) notFound();
+
+  const canonicalSlug = slugMap.get(matchedProduct.id) || matchedProduct.id;
+  if (identifier !== canonicalSlug) {
+    redirect(`/products/${canonicalSlug}`);
+  }
 
   const product = await prisma.product.findUnique({
-    where: { id, active: true },
+    where: { id: matchedProduct.id, active: true },
     select: {
       id: true,
       title: true,

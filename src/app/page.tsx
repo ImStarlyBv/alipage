@@ -1,22 +1,38 @@
 import Link from "next/link";
 import { prisma } from "@/lib/models";
 import ProductCard from "@/components/ProductCard";
+import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const products = await prisma.product.findMany({
-    where: { active: true },
-    take: 8,
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      title: true,
-      images: true,
-      salePrice: true,
-      stock: true,
-    },
-  });
+  const [products, slugProducts] = await Promise.all([
+    prisma.product.findMany({
+      where: { active: true },
+      take: 8,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        images: true,
+        salePrice: true,
+        stock: true,
+      },
+    }),
+    prisma.product.findMany({
+      where: { active: true },
+      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      select: {
+        id: true,
+        title: true,
+      },
+    }),
+  ]);
+  const slugMap = buildProductSlugMap(slugProducts);
+  const productsWithSlugs = products.map((product) => ({
+    ...product,
+    slug: slugMap.get(product.id) || product.id,
+  }));
 
   return (
     <div>
@@ -51,7 +67,7 @@ export default async function Home() {
             </Link>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-            {products.map((product) => (
+            {productsWithSlugs.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

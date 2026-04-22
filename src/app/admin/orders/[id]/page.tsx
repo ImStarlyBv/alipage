@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 interface OrderLog {
@@ -78,18 +78,18 @@ export default function AdminOrderDetailPage() {
     tracking: string;
   } | null>(null);
 
-  useEffect(() => {
-    loadOrder();
-  }, [params.id]);
-
-  async function loadOrder() {
+  const loadOrder = useCallback(async () => {
     setLoading(true);
     const res = await fetch(`/api/admin/orders/${params.id}`);
     if (res.ok) {
       setOrder(await res.json());
     }
     setLoading(false);
-  }
+  }, [params.id]);
+
+  useEffect(() => {
+    void Promise.resolve().then(loadOrder);
+  }, [loadOrder]);
 
   async function retryOrder() {
     if (!order) return;

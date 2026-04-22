@@ -5,6 +5,7 @@ import Link from "next/link";
 
 interface Product {
   id: string;
+  slug: string;
   title: string;
   salePrice: string;
   basePrice: string;
@@ -177,7 +178,7 @@ export default function AdminProductsPage() {
                   </td>
                   <td className="py-3">
                     <Link
-                      href={`/products/${product.id}`}
+                      href={`/products/${product.slug}`}
                       className="text-xs text-blue-600 hover:underline"
                     >
                       View

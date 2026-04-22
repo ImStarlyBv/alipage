@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__kittycontrol-seo__transform_all_products",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "mcp__kittycontrol-seo__rename_product"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "kittycontrol-seo"
+  ]
+}

@@ -4,6 +4,7 @@ import Image from "next/image";
 interface ProductCardProps {
   product: {
     id: string;
+    slug: string;
     title: string;
     images: unknown;
     salePrice: unknown;
@@ -18,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link
-      href={`/products/${product.id}`}
+      href={`/products/${product.slug}`}
       className="group block overflow-hidden rounded-xl bg-white shadow-sm transition-all hover:shadow-md hover:shadow-secondary/30"
     >
       <div className="relative aspect-square bg-beige">
