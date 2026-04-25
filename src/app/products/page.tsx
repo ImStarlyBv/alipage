@@ -1,10 +1,20 @@
 import { prisma } from "@/lib/models";
+import type { Metadata } from "next";
 import ProductCard from "@/components/ProductCard";
 import CategoryNav from "@/components/CategoryNav";
 import Link from "next/link";
 import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "All Cat Toys — Shop Interactive, Wand & Chew Toys",
+  description:
+    "Browse our full collection of cat toys. Interactive toys, wand toys, ball toys, plush toys and more for indoor cats and kittens. Free shipping worldwide.",
+  alternates: {
+    canonical: "/products",
+  },
+};
 
 export default async function ProductsPage({
   searchParams,

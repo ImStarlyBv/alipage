@@ -1,7 +1,17 @@
 import { prisma } from "@/lib/models";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Cat Toy Categories — Find the Perfect Toy for Your Cat",
+  description:
+    "Browse cat toys by category: interactive toys, wand toys, chew toys, ball toys, plush toys and more. Find the perfect toy for your indoor cat or kitten.",
+  alternates: {
+    canonical: "/categories",
+  },
+};
 
 const cardColors = [
   "bg-beige",

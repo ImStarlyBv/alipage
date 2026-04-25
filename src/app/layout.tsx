@@ -17,8 +17,41 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Store - Quality Products at Great Prices",
-  description: "Shop quality products with worldwide shipping",
+  title: {
+    default: "Kitty Control — Best Cat Toys & Interactive Toys for Indoor Cats",
+    template: "%s | Kitty Control",
+  },
+  description:
+    "Shop the best cat toys online — interactive cat toys, wand toys, chew toys & enrichment toys for kittens and indoor cats. Free worldwide shipping.",
+  keywords: [
+    "cat toys",
+    "interactive cat toys",
+    "best cat toys",
+    "cat toys for indoor cats",
+    "indoor cat",
+    "cat toy",
+    "kitten toys",
+    "cat enrichment toys",
+    "cat wand toy",
+    "cat chew toys",
+    "automatic cat toys",
+    "cat toys for bored cats",
+  ],
+  metadataBase: new URL("https://kittycontrol.shop"),
+  openGraph: {
+    type: "website",
+    siteName: "Kitty Control",
+    title: "Kitty Control — Best Cat Toys & Interactive Toys for Indoor Cats",
+    description:
+      "Shop the best cat toys online — interactive toys, wand toys, chew toys & enrichment toys for kittens and indoor cats.",
+    url: "https://kittycontrol.shop",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kitty Control — Best Cat Toys for Indoor Cats & Kittens",
+    description:
+      "Shop interactive cat toys, wand toys, chew toys & enrichment toys. Free worldwide shipping.",
+  },
 };
 
 export default function RootLayout({
@@ -26,12 +59,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Kitty Control",
+    url: "https://kittycontrol.shop",
+    description:
+      "Online store specializing in the best cat toys — interactive toys, wand toys, chew toys and enrichment toys for indoor cats and kittens.",
+  };
+
   return (
     <html
       lang="en"
       className={`${openSans.variable} ${playfair.variable} h-full antialiased`}
     >
-      <head>
+      <body className="min-h-full flex flex-col">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-RVCJDY77VJ"
           strategy="afterInteractive"
@@ -44,8 +86,10 @@ export default function RootLayout({
             gtag('config', 'G-RVCJDY77VJ');
           `}
         </Script>
-      </head>
-      <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <Providers>
           <Header />
           <main className="flex-1">{children}</main>

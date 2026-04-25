@@ -1,14 +1,87 @@
 import { prisma } from "@/lib/models";
 import { notFound } from "next/navigation";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import AddToCartButton from "@/components/AddToCartButton";
 import ShippingOptions from "@/components/ShippingOptions";
 import ImageCarousel from "@/components/ImageCarousel";
 import DescriptionGallery from "@/components/DescriptionGallery";
 import StickyCartBar from "@/components/StickyCartBar";
+import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
 import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 
 export const dynamic = "force-dynamic";
+
+async function resolveProduct(identifier: string) {
+  const slugProducts = await prisma.product.findMany({
+    where: { active: true },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: {
+      id: true,
+      title: true,
+    },
+  });
+  const slugMap = buildProductSlugMap(slugProducts);
+  const matchedProduct = slugProducts.find(
+    (product) =>
+      product.id === identifier || slugMap.get(product.id) === identifier
+  );
+
+  if (!matchedProduct) return null;
+
+  const canonicalSlug = slugMap.get(matchedProduct.id) || matchedProduct.id;
+  return { matchedProduct, canonicalSlug };
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id: identifier } = await params;
+  const resolved = await resolveProduct(identifier);
+
+  if (!resolved) {
+    return { title: "Product Not Found" };
+  }
+
+  const product = await prisma.product.findUnique({
+    where: { id: resolved.matchedProduct.id, active: true },
+    select: {
+      title: true,
+      salePrice: true,
+      images: true,
+      category: { select: { name: true } },
+    },
+  });
+
+  if (!product) {
+    return { title: "Product Not Found" };
+  }
+
+  const price = Number(product.salePrice);
+  const images = Array.isArray(product.images)
+    ? (product.images as string[]).slice(0, 3)
+    : [];
+  const categoryPrefix = product.category
+    ? `${product.category.name} — `
+    : "";
+
+  return {
+    title: `${product.title} — Buy Cat Toy Online`,
+    description: `Shop ${product.title} at Kitty Control. $${price.toFixed(2)} with free shipping. ${categoryPrefix}Interactive cat toy perfect for indoor cats and kittens.`,
+    alternates: {
+      canonical: `/products/${resolved.canonicalSlug}`,
+    },
+    openGraph: {
+      title: `${product.title} — $${price.toFixed(2)}`,
+      description: `${product.title} — $${price.toFixed(2)} with free worldwide shipping. Shop the best cat toys at Kitty Control.`,
+      images: images,
+      type: "website",
+      url: `https://kittycontrol.shop/products/${resolved.canonicalSlug}`,
+    },
+  };
+}
 
 export default async function ProductDetailPage({
   params,
@@ -75,11 +148,66 @@ export default async function ProductDetailPage({
     values: Array.from(values),
   }));
 
+  // Breadcrumb data
+  const breadcrumbItems = [
+    { name: "Home", url: "https://kittycontrol.shop" },
+    { name: "Cat Toys", url: "https://kittycontrol.shop/products" },
+  ];
+  if (product.category) {
+    breadcrumbItems.push({
+      name: product.category.name,
+      url: `https://kittycontrol.shop/products?categoryId=${product.category.id}`,
+    });
+  }
+  breadcrumbItems.push({
+    name: product.title,
+    url: `https://kittycontrol.shop/products/${canonicalSlug}`,
+  });
+
   return (
     <div className="mx-auto max-w-7xl px-4 pb-20 pt-6 md:pb-8 md:pt-8">
+      {/* JSON-LD Structured Data */}
+      <ProductJsonLd
+        product={{
+          title: product.title,
+          description: product.description,
+          images,
+          salePrice: price,
+          stock: product.stock,
+          slug: canonicalSlug,
+          category: product.category,
+        }}
+      />
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+
+      {/* Breadcrumb Navigation */}
+      <nav className="mb-4 text-xs text-foreground/50" aria-label="Breadcrumb">
+        <ol className="flex flex-wrap items-center gap-1">
+          <li>
+            <a href="/" className="hover:text-primary-dark transition-colors">Home</a>
+          </li>
+          <li className="before:content-['/'] before:mx-1">
+            <a href="/products" className="hover:text-primary-dark transition-colors">Cat Toys</a>
+          </li>
+          {product.category && (
+            <li className="before:content-['/'] before:mx-1">
+              <a
+                href={`/products?categoryId=${product.category.id}`}
+                className="hover:text-primary-dark transition-colors"
+              >
+                {product.category.name}
+              </a>
+            </li>
+          )}
+          <li className="before:content-['/'] before:mx-1 text-foreground/80">
+            <span className="line-clamp-1">{product.title}</span>
+          </li>
+        </ol>
+      </nav>
+
       <div className="grid gap-6 md:grid-cols-2 md:gap-8">
         {/* Image carousel */}
-        <ImageCarousel images={images} alt={product.title} />
+        <ImageCarousel images={images} alt={`${product.title} — Cat Toy`} />
 
         {/* Product info */}
         <div>
@@ -137,7 +265,7 @@ export default async function ProductDetailPage({
           {/* Description */}
           <div className="mt-8 border-t border-secondary/30 pt-6">
             <h2 className="font-heading text-lg font-semibold text-foreground">
-              Description
+              Product Description
             </h2>
             <div className="mt-3">
               <DescriptionGallery html={product.description} />

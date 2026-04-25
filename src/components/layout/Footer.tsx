@@ -47,14 +47,14 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-heading text-lg font-bold text-white">Clevver</h3>
+            <h3 className="font-heading text-lg font-bold text-white">Kitty Control</h3>
             <p className="mt-3 text-sm text-white/70">
-              Quality products at great prices, shipped worldwide.
+              The best cat toys for indoor cats and kittens, shipped worldwide.
             </p>
           </div>
         </div>
         <div className="mt-8 border-t border-white/20 pt-6 text-center text-xs text-white/50">
-          &copy; {new Date().getFullYear()} Clevver. All rights reserved.
+          &copy; {new Date().getFullYear()} Kitty Control. All rights reserved.
         </div>
       </div>
     </footer>
