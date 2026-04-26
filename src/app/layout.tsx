@@ -38,6 +38,11 @@ export const metadata: Metadata = {
     "cat toys for bored cats",
   ],
   metadataBase: new URL("https://kittycontrol.shop"),
+  verification: {
+    other: {
+      "linksindexer-site-verification": "8c2ac6abce1fbd00e38ace9b517b83ad33e22776aaafdc187f7a75332d9a98f0",
+    },
+  },
   openGraph: {
     type: "website",
     siteName: "Kitty Control",
