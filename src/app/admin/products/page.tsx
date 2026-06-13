@@ -21,6 +21,12 @@ export default function AdminProductsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editPrice, setEditPrice] = useState("");
   const [saving, setSaving] = useState<string | null>(null);
+  const [wipeOpen, setWipeOpen] = useState(false);
+  const [wipeConfirm, setWipeConfirm] = useState("");
+  const [wiping, setWiping] = useState(false);
+  const [wipeMsg, setWipeMsg] = useState<string | null>(null);
+
+  const WIPE_PHRASE = "DELETE ALL PRODUCTS";
 
   useEffect(() => {
     loadProducts();
@@ -40,6 +46,36 @@ export default function AdminProductsPage() {
       await loadProducts();
     } finally {
       setSyncing(false);
+    }
+  }
+
+  async function handleWipe() {
+    if (wipeConfirm !== WIPE_PHRASE) return;
+    setWiping(true);
+    setWipeMsg(null);
+    try {
+      const res = await fetch("/api/admin/products/delete-all", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: WIPE_PHRASE }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setWipeMsg(
+          `Wiped ${data.deleted?.products ?? 0} products and ${
+            data.deleted?.categories ?? 0
+          } categories.`
+        );
+        setWipeOpen(false);
+        setWipeConfirm("");
+        await loadProducts();
+      } else {
+        setWipeMsg(data.error || "Failed to wipe products.");
+      }
+    } catch {
+      setWipeMsg("Network error while wiping products.");
+    } finally {
+      setWiping(false);
     }
   }
 
@@ -100,8 +136,62 @@ export default function AdminProductsPage() {
           >
             Import New
           </Link>
+          <button
+            onClick={() => {
+              setWipeOpen((v) => !v);
+              setWipeMsg(null);
+            }}
+            className="rounded border border-red-300 px-3 py-1.5 text-sm text-red-700 hover:bg-red-50"
+          >
+            Delete all
+          </button>
         </div>
       </div>
+
+      {wipeOpen && (
+        <div className="mt-4 rounded-lg border border-red-300 bg-red-50 p-4">
+          <p className="text-sm font-semibold text-red-800">
+            Danger zone — this permanently deletes every product and imported
+            category.
+          </p>
+          <p className="mt-1 text-sm text-red-700">
+            Type{" "}
+            <code className="rounded bg-white px-1 font-mono">{WIPE_PHRASE}</code>{" "}
+            to confirm.
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <input
+              type="text"
+              value={wipeConfirm}
+              onChange={(e) => setWipeConfirm(e.target.value)}
+              placeholder={WIPE_PHRASE}
+              className="w-64 rounded border border-red-300 px-2 py-1 text-sm focus:border-red-500 focus:outline-none"
+              aria-label="Confirmation phrase"
+            />
+            <button
+              onClick={handleWipe}
+              disabled={wipeConfirm !== WIPE_PHRASE || wiping}
+              className="rounded bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {wiping ? "Wiping…" : "Wipe catalog"}
+            </button>
+            <button
+              onClick={() => {
+                setWipeOpen(false);
+                setWipeConfirm("");
+              }}
+              className="px-2 text-sm text-gray-500 hover:text-gray-700"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+      {wipeMsg && (
+        <p className="mt-3 text-sm text-gray-700" role="status">
+          {wipeMsg}
+        </p>
+      )}
 
       {products.length === 0 ? (
         <p className="mt-8 text-center text-gray-500">No products yet.</p>

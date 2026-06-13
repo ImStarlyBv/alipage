@@ -49,7 +49,8 @@ export default function Footer() {
           <div>
             <h3 className="font-heading text-lg font-bold text-white">Kitty Control</h3>
             <p className="mt-3 text-sm text-white/70">
-              The best cat toys for indoor cats and kittens, shipped worldwide.
+              Sphynx cat clothes for hairless cats — warm sweaters, shirts,
+              pajamas and hoodies, shipped worldwide.
             </p>
           </div>
         </div>

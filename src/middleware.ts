@@ -46,7 +46,7 @@ export const config = {
     "/api/checkout/:path*",
     "/api/orders/:path*",
     "/api/admin/orders/:path*",
-    "/api/admin/products/sync",
+    "/api/admin/products/:path*",
     "/admin/:path*",
     "/account/:path*",
   ],

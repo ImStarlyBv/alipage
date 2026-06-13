@@ -5,9 +5,9 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Cat Toy Categories — Find the Perfect Toy for Your Cat",
+  title: "Sphynx Cat Clothes Categories — Sweaters, Shirts & More",
   description:
-    "Browse cat toys by category: interactive toys, wand toys, chew toys, ball toys, plush toys and more. Find the perfect toy for your indoor cat or kitten.",
+    "Browse sphynx cat clothes by category: warm sweaters, cotton shirts, pajamas, hoodies, winter fleece and costumes for hairless cats. Find the perfect fit.",
   alternates: {
     canonical: "/categories",
   },
@@ -32,7 +32,9 @@ export default async function CategoriesPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="font-heading text-3xl font-bold text-foreground">Categories</h1>
+      <h1 className="font-heading text-3xl font-bold text-foreground">
+        Sphynx Cat Clothes Categories
+      </h1>
 
       {categories.length === 0 ? (
         <p className="mt-12 text-center text-foreground/50">

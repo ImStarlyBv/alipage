@@ -68,14 +68,14 @@ export async function generateMetadata({
     : "";
 
   return {
-    title: `${product.title} — Buy Cat Toy Online`,
-    description: `Shop ${product.title} at Kitty Control. $${price.toFixed(2)} with free shipping. ${categoryPrefix}Interactive cat toy perfect for indoor cats and kittens.`,
+    title: `${product.title} — Sphynx Cat Clothes`,
+    description: `Shop ${product.title} at Kitty Control for $${price.toFixed(2)} with free worldwide shipping. ${categoryPrefix}Soft, breathable sphynx cat clothing made for hairless cats.`,
     alternates: {
       canonical: `/products/${resolved.canonicalSlug}`,
     },
     openGraph: {
       title: `${product.title} — $${price.toFixed(2)}`,
-      description: `${product.title} — $${price.toFixed(2)} with free worldwide shipping. Shop the best cat toys at Kitty Control.`,
+      description: `${product.title} — $${price.toFixed(2)} with free worldwide shipping. Sphynx cat clothes for hairless cats at Kitty Control.`,
       images: images,
       type: "website",
       url: `https://kittycontrol.shop/products/${resolved.canonicalSlug}`,
@@ -151,7 +151,7 @@ export default async function ProductDetailPage({
   // Breadcrumb data
   const breadcrumbItems = [
     { name: "Home", url: "https://kittycontrol.shop" },
-    { name: "Cat Toys", url: "https://kittycontrol.shop/products" },
+    { name: "Sphynx Cat Clothes", url: "https://kittycontrol.shop/products" },
   ];
   if (product.category) {
     breadcrumbItems.push({
@@ -187,7 +187,7 @@ export default async function ProductDetailPage({
             <a href="/" className="hover:text-primary-dark transition-colors">Home</a>
           </li>
           <li className="before:content-['/'] before:mx-1">
-            <a href="/products" className="hover:text-primary-dark transition-colors">Cat Toys</a>
+            <a href="/products" className="hover:text-primary-dark transition-colors">Sphynx Cat Clothes</a>
           </li>
           {product.category && (
             <li className="before:content-['/'] before:mx-1">
@@ -207,7 +207,7 @@ export default async function ProductDetailPage({
 
       <div className="grid gap-6 md:grid-cols-2 md:gap-8">
         {/* Image carousel */}
-        <ImageCarousel images={images} alt={`${product.title} — Cat Toy`} />
+        <ImageCarousel images={images} alt={`${product.title} — Sphynx Cat Clothes`} />
 
         {/* Product info */}
         <div>

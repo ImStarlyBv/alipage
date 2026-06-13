@@ -18,24 +18,24 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: "Kitty Control — Best Cat Toys & Interactive Toys for Indoor Cats",
+    default: "Kitty Control — Sphynx Cat Clothes for Hairless Cats",
     template: "%s | Kitty Control",
   },
   description:
-    "Shop the best cat toys online — interactive cat toys, wand toys, chew toys & enrichment toys for kittens and indoor cats. Free worldwide shipping.",
+    "Shop sphynx cat clothes for hairless cats — warm sweaters, breathable cotton shirts, pajamas, hoodies & winter outfits. Soft, seamless, skin-friendly. Free worldwide shipping.",
   keywords: [
-    "cat toys",
-    "interactive cat toys",
-    "best cat toys",
-    "cat toys for indoor cats",
-    "indoor cat",
-    "cat toy",
-    "kitten toys",
-    "cat enrichment toys",
-    "cat wand toy",
-    "cat chew toys",
-    "automatic cat toys",
-    "cat toys for bored cats",
+    "sphynx cat clothes",
+    "hairless cat clothes",
+    "sphynx cat sweater",
+    "sphynx cat shirt",
+    "sphynx cat clothing",
+    "clothes for sphynx cats",
+    "hairless cat sweater",
+    "sphynx cat pajamas",
+    "sphynx cat onesie",
+    "sphynx cat hoodie",
+    "sphynx winter clothes",
+    "sphynx cat outfits",
   ],
   metadataBase: new URL("https://kittycontrol.shop"),
   verification: {
@@ -46,16 +46,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Kitty Control",
-    title: "Kitty Control — Best Cat Toys & Interactive Toys for Indoor Cats",
+    title: "Kitty Control — Sphynx Cat Clothes for Hairless Cats",
     description:
-      "Shop the best cat toys online — interactive toys, wand toys, chew toys & enrichment toys for kittens and indoor cats.",
+      "Shop sphynx cat clothes — warm sweaters, breathable shirts, pajamas, hoodies & winter outfits for hairless cats.",
     url: "https://kittycontrol.shop",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kitty Control — Best Cat Toys for Indoor Cats & Kittens",
+    title: "Kitty Control — Sphynx Cat Clothes for Hairless Cats",
     description:
-      "Shop interactive cat toys, wand toys, chew toys & enrichment toys. Free worldwide shipping.",
+      "Warm sweaters, breathable shirts, pajamas & hoodies for sphynx cats. Free worldwide shipping.",
   },
 };
 
@@ -70,7 +70,7 @@ export default function RootLayout({
     name: "Kitty Control",
     url: "https://kittycontrol.shop",
     description:
-      "Online store specializing in the best cat toys — interactive toys, wand toys, chew toys and enrichment toys for indoor cats and kittens.",
+      "Online store specializing in sphynx cat clothes for hairless cats — warm sweaters, breathable shirts, pajamas, hoodies and winter outfits.",
   };
 
   return (
