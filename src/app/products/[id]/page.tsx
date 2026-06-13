@@ -68,7 +68,7 @@ export async function generateMetadata({
     : "";
 
   return {
-    title: `${product.title} — Sphynx Cat Clothes`,
+    title: product.title,
     description: `Shop ${product.title} at Kitty Control for $${price.toFixed(2)} with free worldwide shipping. ${categoryPrefix}Soft, breathable sphynx cat clothing made for hairless cats.`,
     alternates: {
       canonical: `/products/${resolved.canonicalSlug}`,
