@@ -80,8 +80,8 @@ export default async function ProductsPage({
       ) : (
         <>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-            {productsWithSlugs.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {productsWithSlugs.map((product, i) => (
+              <ProductCard key={product.id} product={product} priority={i < 4} />
             ))}
           </div>
 

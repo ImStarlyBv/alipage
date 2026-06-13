@@ -10,9 +10,11 @@ interface ProductCardProps {
     salePrice: unknown;
     stock: number;
   };
+  /** Set on the first above-the-fold cards so the LCP image isn't lazy-loaded. */
+  priority?: boolean;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, priority = false }: ProductCardProps) {
   const images = product.images as string[];
   const price = Number(product.salePrice);
   const image = images?.[0] || "";
@@ -30,6 +32,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
           />
         ) : (
           <div className="flex h-full items-center justify-center text-foreground/30">
