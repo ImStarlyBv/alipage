@@ -41,6 +41,17 @@ export const refundSchema = z.object({
   amount: z.number().positive().optional(),
 });
 
+// ─── Reviews ─────────────────────────────────────────────
+
+export const createReviewSchema = z.object({
+  rating: z.number().int().min(1, "Rating is required").max(5),
+  title: z.string().max(120).optional(),
+  body: z
+    .string()
+    .min(10, "Review must be at least 10 characters")
+    .max(2000, "Review must be 2000 characters or fewer"),
+});
+
 // ─── Admin ───────────────────────────────────────────────
 
 export const importProductSchema = z.object({

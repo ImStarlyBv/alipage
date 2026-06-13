@@ -126,6 +126,14 @@ export default function OrderDetailPage() {
               <div>
                 <p className="text-sm font-medium text-foreground">{item.name}</p>
                 <p className="text-xs text-foreground/50">Qty: {item.quantity}</p>
+                {item.productId && (
+                  <Link
+                    href={`/products/${item.productId}#reviews`}
+                    className="mt-1 inline-block text-xs font-medium text-primary-dark hover:underline"
+                  >
+                    Write a review
+                  </Link>
+                )}
               </div>
               <p className="text-sm font-bold text-primary-dark">
                 ${(Number(item.unitPrice) * item.quantity).toFixed(2)}

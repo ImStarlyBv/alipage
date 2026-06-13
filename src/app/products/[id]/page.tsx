@@ -9,6 +9,9 @@ import DescriptionGallery from "@/components/DescriptionGallery";
 import StickyCartBar from "@/components/StickyCartBar";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
 import { buildProductSlugMap } from "@/lib/utils/product-slugs";
+import { getProductReviews } from "@/lib/services/reviews";
+import StarRating from "@/components/reviews/StarRating";
+import ReviewForm from "@/components/reviews/ReviewForm";
 
 export const dynamic = "force-dynamic";
 
@@ -126,6 +129,8 @@ export default async function ProductDetailPage({
 
   if (!product) notFound();
 
+  const { average, count, reviews } = await getProductReviews(product.id);
+
   const images = product.images as string[];
   const price = Number(product.salePrice);
   // AE SKU variants: group by property name for display
@@ -177,6 +182,8 @@ export default async function ProductDetailPage({
           slug: canonicalSlug,
           category: product.category,
         }}
+        rating={count > 0 ? { average, count } : undefined}
+        reviews={reviews}
       />
       <BreadcrumbJsonLd items={breadcrumbItems} />
 
@@ -219,6 +226,18 @@ export default async function ProductDetailPage({
           <h1 className="mt-2 font-heading text-xl font-bold text-foreground sm:text-2xl md:text-3xl">
             {product.title}
           </h1>
+          {count > 0 && (
+            <a
+              href="#reviews"
+              className="mt-2 inline-flex items-center gap-2 text-sm text-foreground/70 hover:text-primary-dark"
+            >
+              <StarRating value={average} />
+              <span className="font-medium">{average.toFixed(1)}</span>
+              <span className="text-foreground/50">
+                ({count} review{count !== 1 ? "s" : ""})
+              </span>
+            </a>
+          )}
           <p className="mt-2 text-2xl font-bold text-primary-dark sm:mt-3 sm:text-3xl">
             ${price.toFixed(2)}
           </p>
@@ -273,6 +292,67 @@ export default async function ProductDetailPage({
           </div>
         </div>
       </div>
+
+      {/* ═══════════════ Reviews (server-rendered for crawlers) ═══════════════ */}
+      <section id="reviews" className="mt-12 border-t border-secondary/30 pt-8 scroll-mt-24">
+        <h2 className="font-heading text-xl font-bold text-foreground sm:text-2xl">
+          Customer Reviews
+        </h2>
+
+        {count > 0 ? (
+          <div className="mt-3 flex items-center gap-3">
+            <StarRating value={average} size="text-xl" />
+            <span className="text-lg font-bold text-foreground">
+              {average.toFixed(1)}
+            </span>
+            <span className="text-sm text-foreground/50">
+              based on {count} review{count !== 1 ? "s" : ""}
+            </span>
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-foreground/60">
+            No reviews yet — if you&apos;ve bought this, be the first to review it.
+          </p>
+        )}
+
+        {reviews.length > 0 && (
+          <ul className="mt-6 space-y-5">
+            {reviews.map((r) => (
+              <li
+                key={r.id}
+                className="rounded-xl border border-secondary/30 bg-white p-4"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-semibold text-foreground">
+                    {r.authorName}
+                  </span>
+                  <time
+                    className="text-xs text-foreground/50"
+                    dateTime={new Date(r.createdAt).toISOString().split("T")[0]}
+                  >
+                    {new Date(r.createdAt).toLocaleDateString()}
+                  </time>
+                </div>
+                <div className="mt-1">
+                  <StarRating value={r.rating} size="text-sm" />
+                </div>
+                {r.title && (
+                  <p className="mt-2 text-sm font-semibold text-foreground">
+                    {r.title}
+                  </p>
+                )}
+                <p className="mt-1 text-sm leading-relaxed text-foreground/70">
+                  {r.body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="mt-8 max-w-xl">
+          <ReviewForm productId={product.id} slug={canonicalSlug} />
+        </div>
+      </section>
 
       {/* Sticky mobile cart bar */}
       <StickyCartBar
