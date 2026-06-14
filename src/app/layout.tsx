@@ -9,11 +9,14 @@ import Footer from "@/components/layout/Footer";
 const openSans = Open_Sans({
   variable: "--font-open-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -79,11 +82,14 @@ export default function RootLayout({
       className={`${openSans.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* GA4 — loaded with `lazyOnload` so the 150 KB+ gtag bundle is fetched
+            during browser idle time AFTER the page is interactive, keeping it
+            off the mobile critical render path (was costing ~600 ms to LCP). */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-RVCJDY77VJ"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

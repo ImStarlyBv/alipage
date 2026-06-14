@@ -5,7 +5,12 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git push *)",
-      "mcp__kittycontrol-seo__rename_product"
+      "mcp__kittycontrol-seo__rename_product",
+      "Bash(node -e \"console.log\\(require\\('sharp'\\)?'sharp OK':'no'\\)\")",
+      "Bash(mkdir -p public/happy-cats)",
+      "Bash(node -e ' *)",
+      "Bash(npm run *)",
+      "Bash(grep -iE \"warn|error|polyfill|browserslist|^\\\\s*[┌├└].*/ \\\\b|Compiled|Route \\\\\\(app\\\\\\)|\\\\bƒ /\\\\b|○ /$|First Load\")"
     ]
   },
   "enableAllProjectMcpServers": true,
