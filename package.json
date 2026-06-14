@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "import:legacy-reviews": "node scripts/import-legacy-reviews.js",
+    "import:legacy-reviews:apply": "node scripts/import-legacy-reviews.js --apply"
   },
   "dependencies": {
     "@paypal/paypal-server-sdk": "^2.3.0",

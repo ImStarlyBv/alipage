@@ -23,6 +23,7 @@ RUN mkdir -p .next/cache && chown -R nextjs:nodejs .next
 COPY --from=builder /app/src/generated/prisma ./src/generated/prisma
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/package.json ./package.json
 RUN npm install prisma dotenv --omit=dev
 COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
