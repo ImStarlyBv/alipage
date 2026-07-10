@@ -6,6 +6,15 @@ export default withAuth(
     const { pathname } = req.nextUrl;
     const token = req.nextauth.token;
 
+    // API-key bypass for SEO product writes (rename/description).
+    // Lets an automated task PATCH product copy without an admin session.
+    const apiKey = req.headers.get("x-api-key");
+    const hasValidApiKey =
+      !!process.env.SEO_API_KEY && apiKey === process.env.SEO_API_KEY;
+    if (hasValidApiKey && pathname.startsWith("/api/admin/products")) {
+      return NextResponse.next();
+    }
+
     // Admin routes require ADMIN role
     if (pathname.startsWith("/api/admin") || pathname.startsWith("/admin")) {
       if (token?.role !== "ADMIN") {
@@ -22,6 +31,17 @@ export default withAuth(
     callbacks: {
       authorized({ token, req }) {
         const { pathname } = req.nextUrl;
+
+        // API-key bypass for SEO product writes — authorize here so
+        // withAuth doesn't redirect before the middleware fn runs.
+        const apiKey = req.headers.get("x-api-key");
+        if (
+          process.env.SEO_API_KEY &&
+          apiKey === process.env.SEO_API_KEY &&
+          pathname.startsWith("/api/admin/products")
+        ) {
+          return true;
+        }
 
         // Public API routes that don't require auth
         if (
