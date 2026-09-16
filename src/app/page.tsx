@@ -34,7 +34,7 @@ const clothingCategories = [
   {
     name: "Pajamas & Onesies",
     description:
-      "Full-body onesies and pajamas with snug, seamless fits for sensitive skin",
+      "Full-body onesies and pajamas with a snug fit that covers more skin than a shirt",
     emoji: "🩱",
   },
   {
@@ -104,17 +104,17 @@ const faqItems = [
   {
     question: "What fabric is best for sphynx cat clothes?",
     answer:
-      "Soft, breathable natural fibers are best. Organic cotton and bamboo blends are gentle on delicate, bare skin, wick away excess oils, and resist irritation. For colder days, fleece-lined sweaters add warmth without bulk. Avoid rough wool or itchy seams — look for seamless or flat-seam construction so nothing rubs against the skin.",
+      "There is no single best fabric — it depends on the job. Cotton is breathable and soft against bare skin, but it absorbs sebum and can stain or pill, so it suits everyday wear that gets washed often. Fleece holds warmth best for cold rooms, though it pills with washing too. Smooth synthetic and stretch blends release absorbed oil most readily in the wash. Whichever you choose, fit matters more than fibre: nothing should rub under the front legs.",
   },
   {
     question: "How do I choose the right size for my sphynx?",
     answer:
-      "Measure your cat's neck, chest (the widest point behind the front legs) and back length from neck to tail base, then match those numbers to our size chart on each product. These cats have slim bodies and broad chests, so stretchy fabric with a snug-but-not-tight fit works best. When in doubt between two sizes, size up for comfort and easy movement.",
+      "Measure three things with a soft tape: the neck, the chest at its widest point just behind the front legs, and the back length from the base of the neck to the base of the tail. These cats have slim bodies and broad chests, so stretchy fabric with a snug-but-not-tight fit works best. If your cat measures between two sizes, size up — a slightly roomy garment is far more comfortable than a tight one.",
   },
   {
     question: "How many outfits does a hairless cat need?",
     answer:
-      "Because coat-free cats secrete skin oils throughout the day, vets recommend keeping 3–5 sets in rotation so there's always a clean one while others are washed. Change and wash garments regularly with a mild, baby-grade detergent. Rotating outfits keeps your pet's skin clean and prevents clogged pores or blackheads from oily fabric.",
+      "Coat-free cats secrete skin oils throughout the day, so keeping 3–5 sets in rotation means there is always a clean one while the others are washed. Change and wash garments regularly with a mild, baby-grade detergent. Rotating outfits keeps a clean layer against the skin between baths and cuts down on how often you have to wash your cat's bedding.",
   },
   {
     question: "Do you offer free shipping on sphynx cat clothes?",
@@ -124,7 +124,7 @@ const faqItems = [
   {
     question: "Will these clothes fit Devon Rex and Cornish Rex cats too?",
     answer:
-      "They can. Our outfits are cut for slim, athletic feline bodies, so they also suit near-hairless and short-coated breeds like the Devon Rex, Cornish Rex and Peterbald. Always check the measurements on the size chart against your individual cat, since body shape varies between breeds.",
+      "They can. Our outfits are cut for slim, athletic feline bodies, so they also suit near-hairless and short-coated breeds like the Devon Rex, Cornish Rex and Peterbald. Sizes still vary between individual cats of the same breed, so measure your own cat rather than assuming its usual size.",
   },
 ];
 
@@ -204,7 +204,7 @@ export default async function Home() {
         <p className="mx-auto mt-4 max-w-2xl text-foreground/60 sm:text-lg">
           Discover a curated collection of cosy knits, breathable cotton shirts,
           pajamas, hoodies and winter outfits — all made to keep a furless feline
-          warm, comfortable and protected. Soft, stretchy, seamless fits for
+          warm, comfortable and protected. Soft, stretchy fits that suit
           sensitive skin, with free worldwide shipping on every order.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -247,7 +247,7 @@ export default async function Home() {
           Why Owners Choose Kitty Control
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-center text-foreground/60">
-          We design and handpick apparel made specifically for sphynx and other
+          We handpick apparel chosen specifically for sphynx and other
           coat-free breeds. Whether you have a shivering kitten, an oil-prone
           adult, or a senior who feels every draft, there&apos;s a perfect outfit
           to keep them cosy.
@@ -270,9 +270,9 @@ export default async function Home() {
               Skin-Friendly Fabrics
             </h3>
             <p className="mt-2 text-sm text-foreground/60">
-              Breathable organic cotton and bamboo blends absorb skin oils,
-              resist irritation, and feature seamless construction so nothing
-              rubs against your cat&apos;s delicate, bare skin.
+              Breathable cotton absorbs skin oils between baths, so a light
+              layer keeps your cat comfortable and your furniture cleaner
+              without overheating.
             </p>
           </div>
           <div className="rounded-xl bg-primary/10 p-6 text-center">
@@ -407,20 +407,20 @@ export default async function Home() {
               Warmth isn&apos;t the only benefit. Coat-free cats constantly
               produce skin oils (sebum) that fur would normally absorb.
               Breathable <strong>cotton garments</strong> soak up that excess
-              oil, keeping your cat&apos;s skin balanced and your sofa, bedding
+              oil, keeping your cat&apos;s skin cleaner and your sofa, bedding
               and clothes free of greasy marks between baths. Lightweight shirts
-              and pajamas are ideal for everyday oil absorption, while UPF-rated
-              outfits add sun protection for cats who enjoy sunny windowsills or
-              supervised time outdoors.
+              and pajamas are the ones to reach for on everyday wear; save the
+              fleece for when the room is actually cold.
             </p>
             <p>
               The key to dressing a furless feline is the right fabric and fit.
-              Choose soft, breathable materials like{" "}
-              <strong>organic cotton and bamboo</strong> that are gentle on bare
-              skin, and look for <strong>seamless or flat-seam</strong>{" "}
-              construction so nothing chafes. These cats have slim bodies and
-              broad chests, so stretchy fabric with a snug — but never tight —
-              fit gives them full freedom to stretch, pounce and play.
+              Choose something soft and breathable, and check the seams and
+              labels yourself before it goes on the cat —{" "}
+              <strong>flat seams and a covered label</strong> are what stop
+              chafing, and they matter more than any fibre name on the tag.
+              These cats have slim bodies and broad chests, so stretchy fabric
+              with a snug — but never tight — fit gives them full freedom to
+              stretch, pounce and play.
             </p>
             <p>
               At Kitty Control, every outfit is chosen for softness,
@@ -441,19 +441,21 @@ export default async function Home() {
         <div className="mt-6 space-y-4 text-foreground/70 text-sm leading-relaxed sm:text-base">
           <p>
             The best outfits balance warmth, breathability and comfort. Start
-            with fabric: organic cotton and bamboo blends are soft,
-            hypoallergenic and excellent at wicking away skin oils, which makes
-            them ideal for daily wear. For cold weather, fleece-lined sweaters
-            and turtlenecks add insulation without heavy bulk, while
-            moisture-wicking pajamas keep your cat cosy overnight.
+            with the job you are dressing for: cotton is breathable and soft, so
+            it suits everyday wear in a warm home, while fleece-lined sweaters
+            and turtlenecks hold heat for cold rooms without much bulk. No
+            single fibre is best at everything — cotton absorbs oil but stains
+            and pills, fleece is warm but pills too, and smooth stretch blends
+            wash cleanest.
           </p>
           <p>
             Fit matters just as much as fabric. Measure your cat&apos;s neck,
-            chest and back length and compare them to the size chart on every
-            product page. Because these cats have lean frames and wide chests,
-            stretchy four-way fabric and a seamless cut prevent rubbing and let
-            your pet move freely. If your cat is between sizes, size up — a
-            slightly roomy sweater is far more comfortable than a tight one.
+            chest and back length with a soft tape and go by those numbers
+            rather than by weight or breed. Because these cats have lean frames
+            and wide chests, stretchy fabric that gives in every direction
+            prevents rubbing and lets your pet move freely. If your cat is
+            between sizes, size up — a slightly roomy sweater is far more
+            comfortable than a tight one.
           </p>
           <p>
             Finally, plan for rotation. Since bald cats secrete oil all day, keep

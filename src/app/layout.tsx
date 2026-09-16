@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | Kitty Control",
   },
   description:
-    "Shop sphynx cat clothes for hairless cats — warm sweaters, breathable cotton shirts, pajamas, hoodies & winter outfits. Soft, seamless, skin-friendly. Free worldwide shipping.",
+    "Shop sphynx cat clothes for hairless cats — warm sweaters, breathable cotton shirts, pajamas, hoodies & winter outfits. Soft, skin-friendly. Free worldwide shipping.",
   keywords: [
     "sphynx cat clothes",
     "hairless cat clothes",
