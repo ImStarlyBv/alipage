@@ -6,11 +6,12 @@
  * Google had indexed. This writes the slug that is ALREADY the live URL for
  * each product, freezing it so later title edits stop changing URLs.
  *
- * Slug generation mirrors `slugifyTitle` + `buildProductSlugMap` exactly, over
- * the same rows and the same ordering every render-time call site used
- * (`active: true`, `createdAt asc, id asc`), so no URL changes as a result of
- * running this. `scripts/lib/product-slug.js` is a CommonJS port of the
- * TypeScript original, held in lockstep by a parity test.
+ * Slug generation mirrors `slugifyTitle` + `findFreeSlug` in
+ * `src/lib/utils/product-slugs.ts` exactly, over the same rows and the same
+ * ordering the old render-time call sites used (`active: true`,
+ * `createdAt asc, id asc`), so no URL changes as a result of running this.
+ * `scripts/lib/product-slug.js` is the CommonJS mirror, held in lockstep by a
+ * parity test.
  *
  * Idempotent, and only ever fills NULLs: an existing slug is a product's
  * permanent identity, so a title edit must not rewrite it. Safe to run on every
@@ -23,7 +24,7 @@
 const fs = require("fs");
 const path = require("path");
 const { Client } = require("pg");
-const { slugifyTitle } = require("./lib/product-slug");
+const { slugifyTitle, findFreeSlug } = require("./lib/product-slug");
 
 function loadEnv(filePath) {
   if (!fs.existsSync(filePath)) return;
@@ -47,19 +48,6 @@ function loadEnv(filePath) {
       value = value.slice(1, -1);
     }
     process.env[key] = value;
-  }
-}
-
-/**
- * First candidate not already spoken for. Starts at the bare slug and appends
- * `-2`, `-3`, … so the oldest product keeps the un-suffixed URL.
- */
-function findFreeSlug(baseSlug, taken) {
-  if (!taken.has(baseSlug)) return baseSlug;
-
-  for (let suffix = 2; ; suffix += 1) {
-    const candidate = `${baseSlug}-${suffix}`;
-    if (!taken.has(candidate)) return candidate;
   }
 }
 
@@ -165,7 +153,7 @@ async function main() {
   }
 }
 
-module.exports = { planSlugAssignments, findFreeSlug };
+module.exports = { planSlugAssignments };
 
 if (require.main === module) {
   main().catch((error) => {

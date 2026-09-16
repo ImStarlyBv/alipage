@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/models";
-import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 
 const SITE_URL = "https://kittycontrol.shop";
 
@@ -32,19 +31,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const products = await prisma.product.findMany({
       where: { active: true },
-      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-      select: { id: true, title: true, updatedAt: true },
+      select: { id: true, slug: true, updatedAt: true },
     });
-    const slugMap = buildProductSlugMap(products);
 
-    productPages = products.map((product) => {
-      return {
-        url: `${SITE_URL}/products/${slugMap.get(product.id) || product.id}`,
-        lastModified: product.updatedAt,
-        changeFrequency: "weekly" as const,
-        priority: 0.8,
-      };
-    });
+    productPages = products.map((product) => ({
+      // The stored slug is the URL the page actually serves, so the sitemap and
+      // the PDP can't disagree about a product's address.
+      url: `${SITE_URL}/products/${product.slug ?? product.id}`,
+      lastModified: product.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
+    }));
   } catch (err) {
     console.error("[sitemap] failed to load products:", err);
   }

@@ -1,6 +1,6 @@
 // GET /api/products/[id] — Product detail (processed data only)
 import { prisma } from "@/lib/models";
-import { buildProductSlugMap } from "@/lib/utils/product-slugs";
+import { resolveProductId } from "@/lib/services/products";
 import type { NextRequest } from "next/server";
 
 export async function GET(
@@ -8,29 +8,18 @@ export async function GET(
   ctx: { params: Promise<{ id: string }> }
 ) {
   const { id: identifier } = await ctx.params;
-  const slugProducts = await prisma.product.findMany({
-    where: { active: true },
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-    select: {
-      id: true,
-      title: true,
-    },
-  });
-  const slugMap = buildProductSlugMap(slugProducts);
-  const matchedProduct = slugProducts.find(
-    (product) =>
-      product.id === identifier || slugMap.get(product.id) === identifier
-  );
+  const productId = await resolveProductId(identifier);
 
-  if (!matchedProduct) {
+  if (!productId) {
     return Response.json({ error: "Product not found" }, { status: 404 });
   }
 
   const product = await prisma.product.findUnique({
-    where: { id: matchedProduct.id, active: true },
+    where: { id: productId, active: true },
     select: {
       id: true,
       title: true,
+      slug: true,
       description: true,
       images: true,
       salePrice: true,
@@ -48,6 +37,6 @@ export async function GET(
 
   return Response.json({
     ...product,
-    slug: slugMap.get(product.id) || product.id,
+    slug: product.slug ?? product.id,
   });
 }

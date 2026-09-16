@@ -1,27 +1,13 @@
 // /api/products/[id]/reviews — list published reviews (GET) and submit a
 // verified-purchase review (POST). `id` may be a product id or a slug.
 import { prisma } from "@/lib/models";
-import { buildProductSlugMap } from "@/lib/utils/product-slugs";
+import { resolveProductId } from "@/lib/services/products";
 import { requireAuth } from "@/lib/auth/session";
 import { rateLimit } from "@/lib/utils/rate-limit";
 import { validateBody, createReviewSchema } from "@/lib/utils/validation";
 import { handleApiError } from "@/lib/utils/api-error";
 import { getProductReviews, hasPurchasedProduct } from "@/lib/services/reviews";
 import type { NextRequest } from "next/server";
-
-/** Resolve a slug-or-id to the real product id. */
-async function resolveProductId(identifier: string): Promise<string | null> {
-  const slugProducts = await prisma.product.findMany({
-    where: { active: true },
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-    select: { id: true, title: true },
-  });
-  const slugMap = buildProductSlugMap(slugProducts);
-  const matched = slugProducts.find(
-    (p) => p.id === identifier || slugMap.get(p.id) === identifier
-  );
-  return matched?.id ?? null;
-}
 
 export async function GET(
   _req: NextRequest,

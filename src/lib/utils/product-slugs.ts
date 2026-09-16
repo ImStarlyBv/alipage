@@ -1,12 +1,7 @@
-type ProductSlugSource = {
-  id: string;
-  title: string;
-};
-
 export function slugifyTitle(title: string) {
   const normalized = title
     .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
@@ -15,27 +10,20 @@ export function slugifyTitle(title: string) {
   return normalized || "product";
 }
 
-export function buildProductSlugMap<T extends ProductSlugSource>(products: T[]) {
-  const slugMap = new Map<string, string>();
-  const counts = new Map<string, number>();
+/**
+ * First candidate not already spoken for. Starts at the bare slug and appends
+ * `-2`, `-3`, … so the oldest product keeps the un-suffixed URL.
+ *
+ * `scripts/backfill-product-slugs.js` has the same rule in CommonJS — it runs
+ * from the container entrypoint, where this module isn't on disk — so a parity
+ * test holds the two in lockstep. A product created through the admin import
+ * and one backfilled at deploy time must land on the same URL.
+ */
+export function findFreeSlug(baseSlug: string, taken: Set<string>) {
+  if (!taken.has(baseSlug)) return baseSlug;
 
-  for (const product of products) {
-    const baseSlug = slugifyTitle(product.title);
-    const nextCount = (counts.get(baseSlug) || 0) + 1;
-    counts.set(baseSlug, nextCount);
-
-    slugMap.set(
-      product.id,
-      nextCount === 1 ? baseSlug : `${baseSlug}-${nextCount}`
-    );
+  for (let suffix = 2; ; suffix += 1) {
+    const candidate = `${baseSlug}-${suffix}`;
+    if (!taken.has(candidate)) return candidate;
   }
-
-  return slugMap;
-}
-
-export function getProductSlug<T extends ProductSlugSource>(
-  products: T[],
-  productId: string
-) {
-  return buildProductSlugMap(products).get(productId);
 }

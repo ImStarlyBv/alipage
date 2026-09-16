@@ -1,17 +1,18 @@
 import { describe, it, expect } from "vitest";
 import {
-  buildProductSlugMap as buildFromTs,
+  findFreeSlug as findFreeSlugTs,
   slugifyTitle as slugifyTs,
 } from "../../utils/product-slugs";
 import {
-  buildProductSlugMap as buildFromScript,
+  findFreeSlug as findFreeSlugScript,
   slugifyTitle as slugifyScript,
 } from "../../../../scripts/lib/product-slug.js";
 
-// The CommonJS port exists because the deploy-time backfill runs from the
+// The CommonJS mirror exists because the deploy-time backfill runs from the
 // standalone runner image, which has no loose `src/lib/**` files to import. Two
-// copies of the algorithm is a real drift risk, and drift here means product
-// URLs change on deploy — so both are pinned against each other and against the
+// copies of the algorithm is a real drift risk, and drift here means a product
+// created through the admin import lands on a different URL than the backfill
+// would have given it — so both are pinned against each other and against the
 // titles that are actually live.
 
 /** Every product title in production, from the legacy review import. */
@@ -64,7 +65,37 @@ const ADVERSARIAL_TITLES = [
   "Duplicate Title", // 4th, to check `-4`
 ];
 
-describe("slugifyTitle — script port vs. TypeScript original", () => {
+/**
+ * What the backfill does to a set of titles, in the order it receives them:
+ * slugify each, take the first free candidate, and remember it.
+ */
+function assignInOrder(titles: string[], findFreeSlug: typeof findFreeSlugTs) {
+  const taken = new Set<string>();
+  const slugs: string[] = [];
+
+  for (const title of titles) {
+    const slug = findFreeSlug(slugifyTs(title), taken);
+    taken.add(slug);
+    slugs.push(slug);
+  }
+
+  return slugs;
+}
+
+/** `taken` sets that exercise each branch of the suffix search. */
+const TAKEN_CASES: [string, string[]][] = [
+  ["empty", []],
+  ["bare slug taken", ["fleece-hoodie"]],
+  ["one suffix taken", ["fleece-hoodie", "fleece-hoodie-2"]],
+  ["a gap before the suffix", ["fleece-hoodie-2", "fleece-hoodie-3"]],
+  [
+    "a deep run",
+    ["fleece-hoodie", "fleece-hoodie-2", "fleece-hoodie-3", "fleece-hoodie-4"],
+  ],
+  ["only a near-miss is taken", ["fleece-hoodie-extra", "fleece-hoodies"]],
+];
+
+describe("slugifyTitle — script mirror vs. TypeScript", () => {
   it.each([...LIVE_TITLES, ...ADVERSARIAL_TITLES])(
     "agrees on %j",
     (title) => {
@@ -73,38 +104,31 @@ describe("slugifyTitle — script port vs. TypeScript original", () => {
   );
 });
 
-describe("buildProductSlugMap — script port vs. TypeScript original", () => {
-  it("agrees across the live catalog", () => {
-    const products = LIVE_TITLES.map((title, index) => ({
-      id: `p${index}`,
-      title,
-    }));
+describe("findFreeSlug — script mirror vs. TypeScript", () => {
+  it.each(TAKEN_CASES)("agrees with %s taken", (_label, taken) => {
+    const base = slugifyTs("Fleece Hoodie");
 
-    expect(buildFromScript(products)).toEqual(buildFromTs(products));
+    expect(findFreeSlugScript(base, new Set(taken))).toBe(
+      findFreeSlugTs(base, new Set(taken))
+    );
   });
 
-  it("agrees across adversarial and duplicate titles", () => {
-    const products = ADVERSARIAL_TITLES.map((title, index) => ({
-      id: `a${index}`,
-      title,
-    }));
-
-    expect(buildFromScript(products)).toEqual(buildFromTs(products));
+  it("agrees across adversarial titles assigned in sequence", () => {
+    expect(assignInOrder(ADVERSARIAL_TITLES, findFreeSlugScript)).toEqual(
+      assignInOrder(ADVERSARIAL_TITLES, findFreeSlugTs)
+    );
   });
 });
 
 describe("live catalog safety", () => {
-  it("gives every live product a distinct slug", () => {
-    // The backfill runs over `active: true` ordered by `createdAt asc, id asc`.
-    // No two live titles collide, so every product keeps the bare slug — no
-    // `-2` suffix appears and no currently-served URL changes.
-    const products = LIVE_TITLES.map((title, index) => ({
-      id: `p${index}`,
-      title,
-    }));
-    const slugs = [...buildFromTs(products).values()];
+  it("gives every live product a bare slug — no URL changes on backfill", () => {
+    // The backfill walks `active: true` ordered by `createdAt asc, id asc`. No
+    // two live titles collide, so every product keeps the un-suffixed slug and
+    // no currently-served URL moves.
+    const slugs = assignInOrder(LIVE_TITLES, findFreeSlugTs);
 
     expect(new Set(slugs).size).toBe(LIVE_TITLES.length);
+    expect(slugs.some((slug) => /-\d+$/.test(slug))).toBe(false);
   });
 
   it("anchors a few known-live URLs", () => {
@@ -117,15 +141,26 @@ describe("live catalog safety", () => {
   });
 
   it("resolves duplicates oldest-first, so the earliest product keeps the bare slug", () => {
-    const products = [
-      { id: "old", title: "Duplicate Title" },
-      { id: "new", title: "Duplicate Title" },
-      { id: "newer", title: "Duplicate Title" },
-    ];
-    const slugMap = buildFromTs(products);
+    const slugs = assignInOrder(
+      ["Duplicate Title", "Duplicate Title", "Duplicate Title"],
+      findFreeSlugTs
+    );
 
-    expect(slugMap.get("old")).toBe("duplicate-title");
-    expect(slugMap.get("new")).toBe("duplicate-title-2");
-    expect(slugMap.get("newer")).toBe("duplicate-title-3");
+    expect(slugs).toEqual([
+      "duplicate-title",
+      "duplicate-title-2",
+      "duplicate-title-3",
+    ]);
+  });
+
+  it("skips past a suffix already held by another product", () => {
+    // The admin import asks the same question against the slugs already in the
+    // table, so a title whose `-2` is taken must land on `-3`.
+    expect(
+      findFreeSlugTs(
+        "duplicate-title",
+        new Set(["duplicate-title", "duplicate-title-2"])
+      )
+    ).toBe("duplicate-title-3");
   });
 });

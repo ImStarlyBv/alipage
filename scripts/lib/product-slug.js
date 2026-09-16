@@ -1,5 +1,5 @@
 /**
- * CommonJS port of `src/lib/utils/product-slugs.ts`.
+ * CommonJS mirror of `src/lib/utils/product-slugs.ts`.
  *
  * Deploy-time scripts run from the standalone runner image, which ships
  * `scripts/` and `prisma/` but has no loose `src/lib/**` files, so the backfill
@@ -17,32 +17,22 @@ function slugifyTitle(title) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
-    .replace(/-{2,}/g, "-");
+    .replace(/-{2,}/g, "");
 
   return normalized || "product";
 }
 
 /**
- * Assign a unique slug per product, in array order. Duplicates get `-2`, `-3`,
- * … suffixed to the second and later occurrence, so the oldest product keeps
- * the bare slug.
+ * First candidate not already spoken for. Starts at the bare slug and appends
+ * `-2`, `-3`, … so the oldest product keeps the un-suffixed URL.
  */
-function buildProductSlugMap(products) {
-  const slugMap = new Map();
-  const counts = new Map();
+function findFreeSlug(baseSlug, taken) {
+  if (!taken.has(baseSlug)) return baseSlug;
 
-  for (const product of products) {
-    const baseSlug = slugifyTitle(product.title);
-    const nextCount = (counts.get(baseSlug) || 0) + 1;
-    counts.set(baseSlug, nextCount);
-
-    slugMap.set(
-      product.id,
-      nextCount === 1 ? baseSlug : `${baseSlug}-${nextCount}`
-    );
+  for (let suffix = 2; ; suffix += 1) {
+    const candidate = `${baseSlug}-${suffix}`;
+    if (!taken.has(candidate)) return candidate;
   }
-
-  return slugMap;
 }
 
-module.exports = { slugifyTitle, buildProductSlugMap };
+module.exports = { slugifyTitle, findFreeSlug };

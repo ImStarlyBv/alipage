@@ -1,6 +1,7 @@
 // POST /api/admin/products/import — Import product from AliExpress by ID
 import { prisma } from "@/lib/models";
 import { getProduct } from "@/lib/services/aliexpress/products";
+import { assignProductSlug } from "@/lib/services/products";
 import { validateBody, importProductSchema } from "@/lib/utils/validation";
 import { handleApiError } from "@/lib/utils/api-error";
 
@@ -68,10 +69,13 @@ export async function POST(request: Request) {
     .split(";")
     .filter(Boolean);
 
+  const title = aeProduct.ae_item_base_info_dto?.subject || "Untitled";
+
   const product = await prisma.product.create({
     data: {
       aliexpressId: String(aliexpressId),
-      title: aeProduct.ae_item_base_info_dto?.subject || "Untitled",
+      title,
+      slug: await assignProductSlug(title),
       description: aeProduct.ae_item_base_info_dto?.detail || "",
       images,
       basePrice,

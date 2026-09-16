@@ -3,7 +3,6 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/models";
 import ProductCard from "@/components/ProductCard";
-import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 /* ── ISR: re-generate every hour so Googlebot always gets static HTML ── */
@@ -130,37 +129,27 @@ const faqItems = [
 ];
 
 export default async function Home() {
-  let products: { id: string; title: string; images: unknown; salePrice: unknown; stock: number }[] = [];
+  let products: { id: string; title: string; slug: string | null; images: unknown; salePrice: unknown; stock: number }[] = [];
   let productsWithSlugs: { id: string; title: string; images: unknown; salePrice: unknown; stock: number; slug: string }[] = [];
 
   try {
-    const [fetched, slugProducts] = await Promise.all([
-      prisma.product.findMany({
-        where: { active: true },
-        take: 8,
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          title: true,
-          images: true,
-          salePrice: true,
-          stock: true,
-        },
-      }),
-      prisma.product.findMany({
-        where: { active: true },
-        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-        select: {
-          id: true,
-          title: true,
-        },
-      }),
-    ]);
+    const fetched = await prisma.product.findMany({
+      where: { active: true },
+      take: 8,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        images: true,
+        salePrice: true,
+        stock: true,
+      },
+    });
     products = fetched;
-    const slugMap = buildProductSlugMap(slugProducts);
     productsWithSlugs = products.map((product) => ({
       ...product,
-      slug: slugMap.get(product.id) || product.id,
+      slug: product.slug ?? product.id,
     }));
   } catch {
     // DB unreachable at build time — render static content only

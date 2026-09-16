@@ -1,39 +1,82 @@
 import { prisma } from "@/lib/models";
-import { notFound } from "next/navigation";
-import { redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
+import { cache } from "react";
 import AddToCartButton from "@/components/AddToCartButton";
 import ShippingOptions from "@/components/ShippingOptions";
 import ImageCarousel from "@/components/ImageCarousel";
 import DescriptionGallery from "@/components/DescriptionGallery";
 import StickyCartBar from "@/components/StickyCartBar";
 import { ProductJsonLd, BreadcrumbJsonLd } from "@/components/JsonLd";
-import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 import { getProductReviews } from "@/lib/services/reviews";
 import StarRating from "@/components/reviews/StarRating";
 import ReviewForm from "@/components/reviews/ReviewForm";
 
 export const dynamic = "force-dynamic";
 
-async function resolveProduct(identifier: string) {
-  const slugProducts = await prisma.product.findMany({
-    where: { active: true },
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-    select: {
-      id: true,
-      title: true,
-    },
+const PRODUCT_SELECT = {
+  id: true,
+  title: true,
+  slug: true,
+  description: true,
+  images: true,
+  salePrice: true,
+  stock: true,
+  variants: true,
+  category: { select: { id: true, name: true } },
+} as const;
+
+/**
+ * Resolve a URL segment to a product.
+ *
+ * A slug is stored now rather than derived from the title on every request, so
+ * this is three indexed lookups instead of a full-table scan. Order matters:
+ * the stored slug is the product's URL identity; the id keeps legacy
+ * `/products/<cuid>` links working; and a former slug resolves through
+ * ProductSlugRedirect, so a URL that moved lands on the product rather than
+ * 404ing.
+ *
+ * Wrapped in `cache` because `generateMetadata` and the page both call it — one
+ * query per request instead of two.
+ */
+const resolveProduct = cache(async (identifier: string) => {
+  const product =
+    (await prisma.product.findFirst({
+      where: { slug: identifier, active: true },
+      select: PRODUCT_SELECT,
+    })) ??
+    (await prisma.product.findFirst({
+      where: { id: identifier, active: true },
+      select: PRODUCT_SELECT,
+    }));
+
+  if (product) {
+    return { product, canonicalSlug: product.slug ?? product.id };
+  }
+
+  const former = await prisma.productSlugRedirect.findFirst({
+    where: { fromSlug: identifier, product: { active: true } },
+    select: { product: { select: PRODUCT_SELECT } },
   });
-  const slugMap = buildProductSlugMap(slugProducts);
-  const matchedProduct = slugProducts.find(
-    (product) =>
-      product.id === identifier || slugMap.get(product.id) === identifier
-  );
 
-  if (!matchedProduct) return null;
+  if (!former) return null;
 
-  const canonicalSlug = slugMap.get(matchedProduct.id) || matchedProduct.id;
-  return { matchedProduct, canonicalSlug };
+  return {
+    product: former.product,
+    canonicalSlug: former.product.slug ?? former.product.id,
+  };
+});
+
+/**
+ * A request that is not already on the canonical URL — a legacy id link, or a
+ * slug that has since changed — is a permanent move, so it gets a 308 rather
+ * than the 307 `redirect` would send. Search engines consolidate the old URL
+ * into the new one on a 308; on a 307 they keep both.
+ */
+function assertCanonical(identifier: string, canonicalSlug: string) {
+  if (identifier !== canonicalSlug) {
+    permanentRedirect(`/products/${canonicalSlug}`);
+  }
 }
 
 export async function generateMetadata({
@@ -48,20 +91,7 @@ export async function generateMetadata({
     return { title: "Product Not Found" };
   }
 
-  const product = await prisma.product.findUnique({
-    where: { id: resolved.matchedProduct.id, active: true },
-    select: {
-      title: true,
-      salePrice: true,
-      images: true,
-      category: { select: { name: true } },
-    },
-  });
-
-  if (!product) {
-    return { title: "Product Not Found" };
-  }
-
+  const { product, canonicalSlug } = resolved;
   const price = Number(product.salePrice);
   const images = Array.isArray(product.images)
     ? (product.images as string[]).slice(0, 3)
@@ -74,14 +104,14 @@ export async function generateMetadata({
     title: product.title,
     description: `Shop ${product.title} at Kitty Control for $${price.toFixed(2)} with free worldwide shipping. ${categoryPrefix}Soft, breathable sphynx cat clothing made for hairless cats.`,
     alternates: {
-      canonical: `/products/${resolved.canonicalSlug}`,
+      canonical: `/products/${canonicalSlug}`,
     },
     openGraph: {
       title: `${product.title} — $${price.toFixed(2)}`,
       description: `${product.title} — $${price.toFixed(2)} with free worldwide shipping. Sphynx cat clothes for hairless cats at Kitty Control.`,
       images: images,
       type: "website",
-      url: `https://kittycontrol.shop/products/${resolved.canonicalSlug}`,
+      url: `https://kittycontrol.shop/products/${canonicalSlug}`,
     },
   };
 }
@@ -92,42 +122,12 @@ export default async function ProductDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id: identifier } = await params;
-  const slugProducts = await prisma.product.findMany({
-    where: { active: true },
-    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-    select: {
-      id: true,
-      title: true,
-    },
-  });
-  const slugMap = buildProductSlugMap(slugProducts);
-  const matchedProduct = slugProducts.find(
-    (product) =>
-      product.id === identifier || slugMap.get(product.id) === identifier
-  );
+  const resolved = await resolveProduct(identifier);
 
-  if (!matchedProduct) notFound();
+  if (!resolved) notFound();
 
-  const canonicalSlug = slugMap.get(matchedProduct.id) || matchedProduct.id;
-  if (identifier !== canonicalSlug) {
-    redirect(`/products/${canonicalSlug}`);
-  }
-
-  const product = await prisma.product.findUnique({
-    where: { id: matchedProduct.id, active: true },
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      images: true,
-      salePrice: true,
-      stock: true,
-      variants: true,
-      category: { select: { id: true, name: true } },
-    },
-  });
-
-  if (!product) notFound();
+  const { product, canonicalSlug } = resolved;
+  assertCanonical(identifier, canonicalSlug);
 
   const { average, count, reviews } = await getProductReviews(product.id);
 

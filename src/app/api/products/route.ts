@@ -1,6 +1,5 @@
 // GET /api/products — List products with pagination
 import { prisma } from "@/lib/models";
-import { buildProductSlugMap } from "@/lib/utils/product-slugs";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -14,7 +13,7 @@ export async function GET(request: Request) {
     ...(categoryId ? { categoryId } : {}),
   };
 
-  const [products, total, slugProducts] = await Promise.all([
+  const [products, total] = await Promise.all([
     prisma.product.findMany({
       where,
       skip,
@@ -23,6 +22,7 @@ export async function GET(request: Request) {
       select: {
         id: true,
         title: true,
+        slug: true,
         images: true,
         basePrice: true,
         salePrice: true,
@@ -31,19 +31,10 @@ export async function GET(request: Request) {
       },
     }),
     prisma.product.count({ where }),
-    prisma.product.findMany({
-      where: { active: true },
-      orderBy: [{ createdAt: "asc" }, { id: "asc" }],
-      select: {
-        id: true,
-        title: true,
-      },
-    }),
   ]);
-  const slugMap = buildProductSlugMap(slugProducts);
   const productsWithSlugs = products.map((product) => ({
     ...product,
-    slug: slugMap.get(product.id) || product.id,
+    slug: product.slug ?? product.id,
   }));
 
   return Response.json({
