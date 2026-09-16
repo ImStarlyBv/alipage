@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
     "import:legacy-reviews": "node scripts/import-legacy-reviews.js",
     "import:legacy-reviews:apply": "node scripts/import-legacy-reviews.js --apply"
   },

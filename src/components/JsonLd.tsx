@@ -5,6 +5,7 @@ import {
   RETURN_POLICY,
   priceValidUntil,
 } from "@/lib/seo/merchant-policy";
+import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 interface ProductReviewLd {
   rating: number;
@@ -98,7 +99,7 @@ export function ProductJsonLd({ product, rating, reviews }: ProductJsonLdProps) 
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
     />
   );
 }
@@ -127,7 +128,7 @@ export function BreadcrumbJsonLd({ items }: BreadcrumbJsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
     />
   );
 }

@@ -5,6 +5,7 @@ import "./globals.css";
 import Providers from "@/components/layout/Providers";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -99,7 +100,7 @@ export default function RootLayout({
         </Script>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(organizationJsonLd) }}
         />
         <Providers>
           <Header />

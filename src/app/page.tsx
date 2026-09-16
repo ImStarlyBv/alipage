@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/models";
 import ProductCard from "@/components/ProductCard";
 import { buildProductSlugMap } from "@/lib/utils/product-slugs";
+import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 /* ── ISR: re-generate every hour so Googlebot always gets static HTML ── */
 export const revalidate = 3600;
@@ -213,15 +214,15 @@ export default async function Home() {
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqJsonLd) }}
       />
 
       {/* ═══════════════ Hero ═══════════════ */}
