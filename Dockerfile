@@ -25,7 +25,10 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/package.json ./package.json
-RUN npm install prisma dotenv --omit=dev
+# `pg` is required by scripts/backfill-product-slugs.js, which runs from
+# entrypoint.sh. It is a real dependency but only reachable through the traced
+# standalone bundle otherwise, so install it explicitly here.
+RUN npm install prisma dotenv pg --omit=dev
 COPY --from=builder /app/entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x entrypoint.sh

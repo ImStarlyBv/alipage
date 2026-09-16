@@ -36,6 +36,9 @@ model Product {
   id             String   @id @default(cuid())
   aliexpressId   String   @unique
   title          String
+  slug           String?  @unique // URL identity; independent of title so renames don't move the URL
+  seoTitle       String? // overrides title in <title> when set
+  metaDescription String? @db.Text
   description    String   @db.Text
   images         Json     // string[]
   categoryId     String?
@@ -49,6 +52,22 @@ model Product {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   reviews        Review[]
+  slugRedirects  ProductSlugRedirect[]
+}
+
+// ─── ProductSlugRedirect ─────────────────────────────────
+// Former slugs, so an indexed URL keeps resolving after a product's slug
+// changes. Written by the rename endpoint; read by the PDP, which 308s to the
+// product's current URL instead of 404ing.
+
+model ProductSlugRedirect {
+  id        String   @id @default(cuid())
+  fromSlug  String   @unique
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([productId])
 }
 
 // ─── Customer ────────────────────────────────────────────

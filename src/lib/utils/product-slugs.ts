@@ -3,7 +3,7 @@ type ProductSlugSource = {
   title: string;
 };
 
-function slugifyTitle(title: string) {
+export function slugifyTitle(title: string) {
   const normalized = title
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
