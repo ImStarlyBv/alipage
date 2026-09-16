@@ -15,31 +15,42 @@ import {
 // would have given it — so both are pinned against each other and against the
 // titles that are actually live.
 
-/** Every product title in production, from the legacy review import. */
-const LIVE_TITLES = [
-  "Festive Knit Cat Costume Sweater",
-  "Cherry Blossom Cotton Cat Tee",
-  "Cotton Four-Leg Kitten Pajamas",
-  "Nightfall Fleece Cat Pajama Pullover",
-  "Cosplay Cat Costume Outfit",
-  "Pocket Fleece Turtleneck Cat Jumpsuit",
-  "Brushed Fleece Turtleneck Cat Pullover",
-  "Everyday Fleece Cat Turtleneck",
-  "Four-Leg Fleece Cat Hoodie",
-  "Snug Winter Four-Leg Cat Hoodie",
-  "Arctic Fleece-Lined Cat Hoodie Jacket",
-  "Lounge Four-Leg Cat Sweatshirt Hoodie",
-  "Hooded Fleece Cat Pajama Jumpsuit",
-  "Dreamtime Hooded Cat Onesie",
-  "Cartoon Cotton Cat Onesie",
-  "Cotton Recovery Suit for Hairless Cats",
-  "Breton Stripe Cotton Cat Vest Tee",
-  "Soft Cotton Short-Sleeve Cat Tee",
-  "Graphic Print Cotton Cat Tee",
-  "Gentleman Cat Dress Shirt & Tie",
-  "Heritage Fleece Turtleneck Cat Coat",
-  "Classic Knit Sweater for Hairless Cats",
+/**
+ * Every product in production, as `[title the page renders, URL it is served
+ * at]`, read from the live catalog on 2026-09-16.
+ *
+ * The backfill derives each product's slug from its title at deploy time, so
+ * this table IS the blast radius: every pair must stay equal or a live URL
+ * moves. These are not the titles the products were imported with — the copy
+ * has been rewritten twice since, and each rewrite moved every URL. The URLs
+ * below are the ones that exist now, and the ones the backfill must freeze.
+ */
+const LIVE_PRODUCTS: [title: string, url: string][] = [
+  ["Sphynx Cat Christmas Sweater — Festive Knit", "sphynx-cat-christmas-sweater-festive-knit"],
+  ["Sphynx Cat Shirt — Cherry Blossom Cotton Tee", "sphynx-cat-shirt-cherry-blossom-cotton-tee"],
+  ["Sphynx Cat Pajamas — Cotton Four-Leg Onesie", "sphynx-cat-pajamas-cotton-four-leg-onesie"],
+  ["Sphynx Cat Pajamas — Nightfall Fleece Pullover", "sphynx-cat-pajamas-nightfall-fleece-pullover"],
+  ["Sphynx Cat Costume — Cosplay Outfit", "sphynx-cat-costume-cosplay-outfit"],
+  ["Sphynx Cat Jumpsuit — Pocket Fleece Turtleneck", "sphynx-cat-jumpsuit-pocket-fleece-turtleneck"],
+  ["Sphynx Cat Turtleneck — Brushed Fleece Pullover", "sphynx-cat-turtleneck-brushed-fleece-pullover"],
+  ["Sphynx Cat Turtleneck — Everyday Fleece", "sphynx-cat-turtleneck-everyday-fleece"],
+  ["Sphynx Cat Hoodie — Four-Leg Fleece", "sphynx-cat-hoodie-four-leg-fleece"],
+  ["Sphynx Cat Hoodie — Snug Winter Four-Leg", "sphynx-cat-hoodie-snug-winter-four-leg"],
+  ["Sphynx Cat Jacket — Arctic Fleece-Lined Hoodie", "sphynx-cat-jacket-arctic-fleece-lined-hoodie"],
+  ["Sphynx Cat Sweatshirt — Lounge Four-Leg Hoodie", "sphynx-cat-sweatshirt-lounge-four-leg-hoodie"],
+  ["Sphynx Cat Jumpsuit — Hooded Fleece Pajama", "sphynx-cat-jumpsuit-hooded-fleece-pajama"],
+  ["Sphynx Cat Onesie — Dreamtime Hooded", "sphynx-cat-onesie-dreamtime-hooded"],
+  ["Sphynx Cat Onesie — Cartoon Cotton", "sphynx-cat-onesie-cartoon-cotton"],
+  ["Sphynx Cat Recovery Suit — Soft Cotton", "sphynx-cat-recovery-suit-soft-cotton"],
+  ["Sphynx Cat Vest Tee — Breton Stripe Cotton", "sphynx-cat-vest-tee-breton-stripe-cotton"],
+  ["Sphynx Cat T-Shirt — Soft Cotton Short-Sleeve", "sphynx-cat-t-shirt-soft-cotton-short-sleeve"],
+  ["Sphynx Cat T-Shirt — Graphic Print Cotton", "sphynx-cat-t-shirt-graphic-print-cotton"],
+  ["Sphynx Cat Shirt — Gentleman Dress Shirt & Tie", "sphynx-cat-shirt-gentleman-dress-shirt-tie"],
+  ["Sphynx Cat Coat — Heritage Fleece Turtleneck", "sphynx-cat-coat-heritage-fleece-turtleneck"],
+  ["Sphynx Cat Sweater — Classic Knit", "sphynx-cat-sweater-classic-knit"],
 ];
+
+const LIVE_TITLES = LIVE_PRODUCTS.map(([title]) => title);
 
 /** Shapes that break naive slugifiers, plus the duplicate case. */
 const ADVERSARIAL_TITLES = [
@@ -131,12 +142,21 @@ describe("live catalog safety", () => {
     expect(slugs.some((slug) => /-\d+$/.test(slug))).toBe(false);
   });
 
-  it("anchors a few known-live URLs", () => {
-    expect(slugifyTs("Festive Knit Cat Costume Sweater")).toBe(
-      "festive-knit-cat-costume-sweater"
+  it("derives every live URL from the title that page currently renders", () => {
+    // The whole safety claim of the backfill rests on this: it recomputes each
+    // slug from the title at deploy time, so if the two disagree for even one
+    // product, that product's live URL 404s the moment the new code serves.
+    for (const [title, url] of LIVE_PRODUCTS) {
+      expect(slugifyTs(title)).toBe(url);
+    }
+  });
+
+  it("handles the em dash and ampersand the live titles actually use", () => {
+    expect(slugifyTs("Sphynx Cat Sweater — Classic Knit")).toBe(
+      "sphynx-cat-sweater-classic-knit"
     );
-    expect(slugifyTs("Gentleman Cat Dress Shirt & Tie")).toBe(
-      "gentleman-cat-dress-shirt-tie"
+    expect(slugifyTs("Sphynx Cat Shirt — Gentleman Dress Shirt & Tie")).toBe(
+      "sphynx-cat-shirt-gentleman-dress-shirt-tie"
     );
   });
 
