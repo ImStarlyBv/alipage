@@ -5,6 +5,7 @@ import {
   RETURN_POLICY,
   priceValidUntil,
 } from "@/lib/seo/merchant-policy";
+import { ORGANIZATION_ID } from "@/lib/seo/organization";
 import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 interface ProductReviewLd {
@@ -46,8 +47,13 @@ export function ProductJsonLd({ product, rating, reviews }: ProductJsonLdProps) 
         ?.replace(/<[^>]*>/g, "")
         .slice(0, 500)
         .trim() || product.title,
+    // `@id` ties the brand on every product page to the one Organization node
+    // declared in the root layout, so the brand is a single entity rather than
+    // 22 inline copies Google has to reconcile. `name` stays alongside it
+    // because a consumer that doesn't resolve `@id` still needs it.
     brand: {
       "@type": "Brand",
+      "@id": ORGANIZATION_ID,
       name: BRAND_NAME,
     },
     offers: {

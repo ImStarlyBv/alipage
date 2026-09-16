@@ -157,21 +157,6 @@ export default async function Home() {
   }
 
   /* ── Structured data ── */
-  const websiteJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Kitty Control",
-    url: "https://kittycontrol.shop",
-    description:
-      "Online store specializing in sphynx cat clothes for hairless cats — warm sweaters, breathable shirts, pajamas, hoodies and winter outfits.",
-    potentialAction: {
-      "@type": "SearchAction",
-      target:
-        "https://kittycontrol.shop/products?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  };
-
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -200,11 +185,8 @@ export default async function Home() {
 
   return (
     <div>
-      {/* JSON-LD Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
-      />
+      {/* JSON-LD Structured Data. Organization + WebSite live in the root
+          layout, so this page only contributes what is specific to it. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(itemListJsonLd) }}

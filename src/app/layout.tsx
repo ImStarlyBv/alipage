@@ -6,6 +6,7 @@ import Providers from "@/components/layout/Providers";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { serializeJsonLd } from "@/lib/seo/json-ld";
+import { SITE_JSON_LD } from "@/lib/seo/organization";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -68,15 +69,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const organizationJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Kitty Control",
-    url: "https://kittycontrol.shop",
-    description:
-      "Online store specializing in sphynx cat clothes for hairless cats — warm sweaters, breathable shirts, pajamas, hoodies and winter outfits.",
-  };
-
   return (
     <html
       lang="en"
@@ -100,7 +92,7 @@ export default function RootLayout({
         </Script>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: serializeJsonLd(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(SITE_JSON_LD) }}
         />
         <Providers>
           <Header />
