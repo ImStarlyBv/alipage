@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { prisma } from "@/lib/models";
 import ProductCard from "@/components/ProductCard";
+import FaqAccordion from "@/components/FaqAccordion";
 import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 /* ── ISR: re-generate every hour so Googlebot always gets static HTML ── */
@@ -531,28 +532,7 @@ export default async function Home() {
         <h2 className="font-heading text-2xl font-bold text-foreground text-center sm:text-3xl">
           Frequently Asked Questions
         </h2>
-        <div className="mt-8 space-y-4">
-          {faqItems.map((item, i) => (
-            <details
-              key={i}
-              name="sphynx-faq"
-              className="group rounded-xl border border-secondary/30 bg-white p-5 [&_summary::-webkit-details-marker]:hidden"
-            >
-              <summary className="flex cursor-pointer items-center justify-between gap-3 font-heading text-base font-semibold text-foreground sm:text-lg">
-                {item.question}
-                <span
-                  aria-hidden="true"
-                  className="text-primary-dark transition-transform group-open:rotate-45"
-                >
-                  +
-                </span>
-              </summary>
-              <p className="mt-3 text-sm leading-relaxed text-foreground/60 sm:text-base">
-                {item.answer}
-              </p>
-            </details>
-          ))}
-        </div>
+        <FaqAccordion items={faqItems} name="sphynx-faq" />
       </section>
     </div>
   );
