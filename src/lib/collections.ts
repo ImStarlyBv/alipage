@@ -742,6 +742,88 @@ export const COLLECTIONS: readonly Collection[] = [
     ],
     relatedGuides: [],
   },
+
+  {
+    slug: "devon-rex-clothes",
+    name: "Devon Rex Clothes",
+    h1: "Devon Rex Clothes: Sweaters, Shirts and Onesies for a Slender Build",
+    primaryKeyword: "devon rex clothes",
+    title: "Devon Rex Clothes for Cats",
+    description:
+      "Devon Rex clothes that also fit Cornish Rex and Peterbald cats: knit sweaters, cotton shirts and a hooded onesie sized for a slim, curly-coated build.",
+    updatedAt: "2026-09-17",
+    answer:
+      "Devon Rex clothes fit a body shape close enough to a sphynx's — a slim frame, deep chest and often thin or partial fur — that the same garment works across both breeds, plus Cornish Rex and Peterbald. This page lists only the products whose own listings confirm that fit, not the whole catalogue relabelled for a different breed.",
+    fabricTable: {
+      caption: "What's in this collection, by fabric",
+      rows: [
+        FLEECE_ROW,
+        {
+          fabric: "Knit (acrylic or wool blend)",
+          warmth: "Medium to high",
+          breathability: "Medium",
+          bestFor: "Indoor wear on a breed that, like the sphynx, has little body fat to spare",
+          watchOut: "Loose yarn loops snag on claws; check the inside for long floats",
+        },
+        COTTON_ROW,
+        {
+          fabric: "Hooded cotton onesie",
+          warmth: "Medium to high",
+          breathability: "Low to medium",
+          bestFor: "A cold night, with the hood adding coverage over the head and neck",
+          watchOut: "Check the hood sits loosely enough to shake off",
+        },
+      ],
+    },
+    body: [
+      "Devon Rex, Cornish Rex and Peterbald cats aren't sphynx cats, but they share enough of the same build that clothing sized for a hairless breed usually fits: a slim, long-bodied frame, a deep chest relative to the back, and — depending on the individual cat — anywhere from a thin curly coat to no coat at all. That's a fit question, not a marketing label, which is why this page doesn't relabel the whole catalogue for a second breed. It lists only the products whose own listings state they fit Devon Rex, Cornish Rex or Peterbald cats specifically, alongside sphynx.",
+      "What that leaves is a real cross-section rather than a narrow one: a classic knit sweater and an everyday fleece turtleneck for indoor warmth, a four-leg fleece hoodie for a cold room, a graphic tee, a striped vest and a cherry-blossom tee for warm days, and a hooded cotton onesie for the coldest nights. Between them, the same warmth-versus-breathability trade-offs apply as everywhere else on this site — knit and cotton breathe better, fleece holds more heat, and a onesie covers the legs a pullover doesn't reach.",
+      "A curly or partial coat changes one thing about fit that a bare sphynx doesn't have: some Devon Rex and Cornish Rex cats have enough coat texture that a snugger knit can catch or mat slightly at the shoulders where the fabric rubs. It's a minor consideration next to the chest measurement, which still decides whether a garment stays on, but it's worth a check on a curlier-coated cat the first time a knit is worn.",
+    ],
+    sizingTips: [
+      "Measure the chest just behind the front legs and the back length from neck to tail base — the same two numbers used across every collection on this site.",
+      "A Devon Rex or Cornish Rex with a fuller coat can measure slightly fuller through the chest than a sphynx of the same length; measure your own cat rather than assuming a size from breed alone.",
+      "For a knit worn against a curlier coat, check the inside for snagging after the first wear, not just before it.",
+      "Between two sizes, size up in fleece and down in a close-fitting knit, the same rule as the sweaters and winter-clothes collections.",
+    ],
+    careNotes: [
+      "Wash knit and cotton pieces cool and air dry flat; fleece follows the same care as the winter-clothes and hoodies collections.",
+      "Check for loose yarn loops and long floats before each wear, since a curlier coat can catch on a snag a bare sphynx wouldn't.",
+      "Two pieces in rotation is worth it here too, so one is always clean while the other airs or dries.",
+    ],
+    faqs: [
+      {
+        question: "Do Devon Rex cats need clothes the same way sphynx cats do?",
+        answer:
+          "Often, yes. A Devon Rex has a fine, partial coat rather than a sphynx's bare skin, so it retains a little more warmth on its own, but the slim build and low body fat both breeds share means many Devon Rex cats still run cold indoors and benefit from the same layers.",
+      },
+      {
+        question: "Will sphynx cat clothes fit a Cornish Rex or Peterbald?",
+        answer:
+          "The products on this page are the ones we can confirm fit those breeds, based on their own listings — not every item in the wider catalogue. Body shape is close enough across all four breeds that a garment sized right for one usually works for the others; measure your own cat rather than assuming from breed alone.",
+      },
+      {
+        question: "Why is the Devon Rex collection smaller than the others?",
+        answer:
+          "Because it only lists products whose listings specifically confirm the fit, rather than every sphynx product relabelled for a second breed. That's a smaller, honest list rather than a padded one — the rest of the catalogue is still browsable from the shirts, sweaters, hoodies and pajamas collections.",
+      },
+      {
+        question: "How do I size clothes for a Devon Rex kitten?",
+        answer:
+          "The same way as an adult: measure the chest just behind the front legs and the back length from neck to tail base, and size to those numbers rather than to age. Kittens grow quickly, so expect to re-measure and size up within a few months.",
+      },
+    ],
+    productSlugs: [
+      "sphynx-cat-turtleneck-everyday-fleece",
+      "sphynx-cat-sweater-classic-knit",
+      "sphynx-cat-sweatshirt-lounge-four-leg-hoodie",
+      "sphynx-cat-t-shirt-graphic-print-cotton",
+      "sphynx-cat-vest-tee-breton-stripe-cotton",
+      "sphynx-cat-shirt-cherry-blossom-cotton-tee",
+      "sphynx-cat-onesie-dreamtime-hooded",
+    ],
+    relatedGuides: [],
+  },
 ];
 
 export const COLLECTION_SLUGS: readonly string[] = COLLECTIONS.map((c) => c.slug);
