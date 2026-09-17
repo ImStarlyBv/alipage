@@ -64,6 +64,13 @@ const clothingCategories = [
     emoji: "🎃",
     href: "/sphynx-cat-christmas-sweaters",
   },
+  {
+    name: "Recovery Suits",
+    description:
+      "Soft cotton cover-ups that keep a healing cat from licking stitches after surgery",
+    emoji: "🩹",
+    href: "/cat-recovery-suits",
+  },
 ];
 
 /* ── "Happy cats" gallery — real owners + their dressed-up hairless royalty.
@@ -308,7 +315,7 @@ export default async function Home() {
             Find the perfect outfit for your cat — from warm sweaters and cosy
             hoodies to lightweight shirts and full-body pajamas.
           </p>
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {clothingCategories.map((cat) => (
               <Link
                 key={cat.name}

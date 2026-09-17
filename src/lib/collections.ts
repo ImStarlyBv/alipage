@@ -478,6 +478,93 @@ export const COLLECTIONS: readonly Collection[] = [
       href: "/sphynx-cat-winter-clothes",
     },
   },
+
+  {
+    slug: "cat-recovery-suits",
+    name: "Cat Recovery Suits",
+    h1: "Cat Recovery Suits for Sphynx and Hairless Cats",
+    primaryKeyword: "cat recovery suit",
+    title: "Cat Recovery Suits for Sphynx Cats",
+    description:
+      "Soft cotton cat recovery suits that keep a healing cat from licking stitches after spay or neuter surgery, sized for a sphynx or hairless build.",
+    updatedAt: UPDATED,
+    answer:
+      "A cat recovery suit is a full-body cotton cover that keeps a cat from licking or scratching stitches after spay, neuter or other surgery, without the wide plastic cone that blocks eating, drinking and sleeping normally. It works by covering the wound site with breathable fabric rather than by physically stopping every reach.",
+    fabricTable: {
+      caption:
+        "Recovery-suit fabrics in general — we carry the soft cotton style below",
+      rows: [
+        {
+          fabric: "Soft cotton jersey",
+          warmth: "Low to medium",
+          breathability: "High",
+          bestFor: "Everyday post-op wear against a fresh incision or shaved, bare skin",
+          watchOut: "Needs washing often since it sits directly on the wound site; keep a second suit in rotation",
+        },
+        {
+          fabric: "Cotton-spandex stretch blend",
+          warmth: "Low to medium",
+          breathability: "Medium to high",
+          bestFor: "A snugger fit on a cat that wriggles out of a looser suit",
+          watchOut: "Stretch fabric can ride up if the leg or belly measurement is off, so it needs a closer size check",
+        },
+        {
+          fabric: "Cotton twill or canvas",
+          warmth: "Medium",
+          breathability: "Medium",
+          bestFor: "Longer recovery windows where the fabric needs to hold shape after many washes",
+          watchOut: "Stiffer against bare, healing skin than jersey — not the first choice right after surgery",
+        },
+      ],
+    },
+    body: [
+      "After spay, neuter or another surgery, the standard advice is to stop a cat reaching the incision until it closes. The usual tool is the plastic cone, and the usual complaint about the cone is everything it also stops: eating comfortably, drinking from a normal bowl, sleeping in a curled-up position, and moving around the house without bumping into doorways. A recovery suit solves the same problem a different way — instead of blocking the cat's reach, it covers the wound with fabric, so there is nothing exposed to lick or scratch even when the cat can still reach the area.",
+      "That trade-off is the whole decision. A suit lets a cat eat, drink, groom its face and sleep normally, which matters over the one to two weeks most incisions need to close. What it does not do is stop a determined cat from working at the fabric itself, or from reaching a wound that is not on the torso — a suit covers the belly and back, not a leg or an ear. For a sphynx or another hairless breed, there is a second reason it earns its place beyond the usual reasons: bare skin around a fresh incision is exposed to everything a coated cat's fur would otherwise buffer, including its own claws.",
+      "Fit is what decides whether a recovery suit actually works. Too loose, and a cat can push a paw underneath it and reach the incision anyway, or wriggle out of it entirely, which happens most often around the back legs and the tail opening. Too tight, and closures press directly on a fresh surgical site or restrict normal movement enough that the cat fights the suit instead of settling down. Soft, flat seams over the incision area matter more here than on any other garment on this site, since this is the one piece worn directly against a wound.",
+      "Because it sits against bare, healing skin for most of the day, a recovery suit needs washing more often than an everyday sweater — mild detergent, no softener, full dry before it goes back on.",
+    ],
+    sizingTips: [
+      "Measure the chest just behind the front legs and the back length from the base of the neck to the base of the tail, the same as any other garment — surgical swelling can make a cat measure slightly larger than usual for a day or two.",
+      "Size up if your cat is between sizes. A suit that is a touch loose still covers the wound; one that is tight against a fresh incision is the more serious problem.",
+      "Check the leg and tail openings can pass two fingers, since these are the openings a cat pushes a paw or its head through to reach the wound underneath.",
+      "Fit it once before surgery if you can, in a calm moment, so the first time your cat wears it is not also the first time it feels the incision.",
+    ],
+    careNotes: [
+      "Wash after every wear on mild detergent with no fabric softener, and let it dry fully before putting it back on a healing wound.",
+      "Check the incision site each time the suit comes off for washing — a suit is not a substitute for looking at the wound.",
+      "Keep a second suit in rotation so your cat is never left uncovered while the first one is being washed and dried.",
+      "Stop using the suit and follow your vet's original guidance if your cat is chewing at the fabric itself rather than tolerating it, since a suit only works while it is left alone.",
+    ],
+    faqs: [
+      {
+        question: "Is a recovery suit as effective as a cone after spay or neuter surgery?",
+        answer:
+          "It works differently rather than better or worse. A cone stops a cat physically reaching almost anywhere on its body; a suit covers the torso so there is nothing exposed to lick, but it does not block a leg, ear or a determined paw working underneath the fabric. Many owners use a suit for comfort during the day and keep a cone on hand for overnight or unsupervised time, especially in the first few days.",
+      },
+      {
+        question: "What size recovery suit does a sphynx cat need after spay surgery?",
+        answer:
+          "The same chest and back measurements used for any other sphynx garment on this site, taken calm and standing. Surgical swelling can add slightly to the chest measurement for a day or two, so size up if your cat sits between two sizes rather than down.",
+      },
+      {
+        question: "Can a cat wear a recovery suit after a neuter?",
+        answer:
+          "Yes — the fit and use are the same as after a spay; the suit covers the torso to keep the cat from licking or scratching the incision either way. Check the specific incision location against the suit's coverage before relying on it alone.",
+      },
+      {
+        question: "How long does a cat need to wear a recovery suit?",
+        answer:
+          "For as long as your vet advises the incision needs protecting, which is commonly one to two weeks for a routine spay or neuter — follow your vet's timeline for your cat rather than a fixed number here. Wash the suit regularly across that window rather than leaving one on the whole time.",
+      },
+      {
+        question: "Will a recovery suit stop my cat scratching at its stitches?",
+        answer:
+          "It removes the exposed skin a cat would otherwise lick or nibble directly, which covers most of what causes a reopened incision. It does not stop a cat's back claws reaching through or under a loose suit, which is why fit — snug but not tight over the wound — matters more here than warmth or style.",
+      },
+    ],
+    productSlugs: ["sphynx-cat-recovery-suit-soft-cotton"],
+    relatedGuides: [],
+  },
 ];
 
 export const COLLECTION_SLUGS: readonly string[] = COLLECTIONS.map((c) => c.slug);

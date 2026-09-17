@@ -44,10 +44,13 @@ const LIVE_PRODUCT_SLUGS: readonly string[] = [
 ];
 
 /**
- * The products no Phase 1 collection covers.
+ * The products no collection covers yet.
  *
- * These are not forgotten: Phase 2 adds `/sphynx-cat-shirts`,
- * `/sphynx-cat-pajamas` and `/cat-recovery-suits`, which absorb all of them.
+ * These are not forgotten: Phase 2 still owes `/sphynx-cat-shirts` and
+ * `/sphynx-cat-pajamas`, which absorb the rest. `/cat-recovery-suits` shipped
+ * 2026-09-17 (Ubersuggest: `cat recovery suit` measures 6,600+ vol/mo at SD 27,
+ * ahead of every other collection keyword in the plan — see
+ * `SEO STRATEGY2026.md` §1.5) and its one product is no longer orphaned.
  * Pinned so that shrinking this list has to be a decision, not a side effect.
  *
  * `sphynx-cat-vest-tee-breton-stripe-cotton` is here despite the name. The live
@@ -63,7 +66,6 @@ const ORPHAN_SLUGS: readonly string[] = [
   "sphynx-cat-pajamas-cotton-four-leg-onesie",
   "sphynx-cat-onesie-cartoon-cotton",
   "sphynx-cat-onesie-dreamtime-hooded",
-  "sphynx-cat-recovery-suit-soft-cotton",
 ];
 
 /** Mirrors the `template` in `src/app/layout.tsx`. */
