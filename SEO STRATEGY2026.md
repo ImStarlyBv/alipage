@@ -369,7 +369,7 @@ Specialists: The Sphynx Cat Clothing Co. (UK handmade, Oeko-Tex), YESWARMG, PIKA
 - [ ] Order samples of top 5 best-sellers (for verified specs + photos)
 
 ### Phase 2 — Catalog quality + Feeds (2026-10-15 → 2026-12-15)
-- [ ] **`/cat-recovery-suits` first** (§1.5: highest-volume, lowest-difficulty collection keyword in the whole plan — build ahead of the rest of this list), then pajamas, shirts, devon-rex
+- [x] All 8 collections live (2026-09-17, ahead of schedule): `/cat-recovery-suits`, `/sphynx-cat-shirts`, `/sphynx-cat-pajamas`, `/devon-rex-clothes` shipped in that Ubersuggest-ranked order, joining the 4 from Phase 1. `/devon-rex-clothes` cross-lists 7 products whose own descriptions confirm breed fit rather than owning new products. ORPHAN_SLUGS in `collections.test.ts` is empty.
 - [ ] §3.3 ProductGroup/variant schema
 - [ ] §5.1–5.2 PDP template + unique copy/metas for all 20 products (verified specs only)
 - [ ] §6 trust pages (about, shipping, returns, contact, author)
