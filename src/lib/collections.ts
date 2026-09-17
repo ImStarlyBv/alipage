@@ -658,6 +658,90 @@ export const COLLECTIONS: readonly Collection[] = [
     ],
     relatedGuides: [],
   },
+
+  {
+    slug: "sphynx-cat-pajamas",
+    name: "Sphynx Cat Pajamas",
+    h1: "Sphynx Cat Pajamas and Onesies for Full-Body Coverage",
+    primaryKeyword: "sphynx cat pajamas",
+    title: "Sphynx Cat Pajamas & Onesies",
+    description:
+      "Full-body sphynx cat pajamas and onesies in cotton: a four-leg warmth piece, a lightweight everyday onesie, and a hooded style for cold nights.",
+    updatedAt: "2026-09-17",
+    answer:
+      "Sphynx cat pajamas are full-body cotton onesies covering the legs and tail as well as the chest and back, which a pullover sweater does not reach. They suit bedtime, a cold night, or a cat needing coverage everywhere rather than just the torso — the trade-off is a four-leg piece takes longer to put on than a pullover.",
+    fabricTable: {
+      caption: "Three onesie builds, and what each one is for",
+      rows: [
+        {
+          fabric: "Four-leg cotton onesie",
+          warmth: "Medium",
+          breathability: "Medium",
+          bestFor: "Full-body warmth for a kitten or a cat that runs cold at night",
+          watchOut: "Four legs means four openings to check for tightness before every wear",
+        },
+        {
+          fabric: "Lightweight cotton onesie",
+          warmth: "Low",
+          breathability: "High",
+          bestFor: "Mild days and full coverage without much added warmth",
+          watchOut: "Not the piece for a genuinely cold room — it covers more skin than a tee, but doesn't add much heat",
+        },
+        {
+          fabric: "Hooded cotton onesie",
+          warmth: "Medium to high",
+          breathability: "Low to medium",
+          bestFor: "Cold nights, where the hood adds coverage over the head and neck",
+          watchOut: "Check the hood sits loosely enough to shake off — nothing should hold it over the ears",
+        },
+      ],
+    },
+    body: [
+      "A onesie covers ground a pullover sweater cannot: the legs, and often the tail base, as well as the chest and back. For a hairless cat that curls up tightly to sleep, that matters, because the parts a curled-up cat tucks against its own body — the legs and belly — are also the parts a two-piece garment leaves exposed. The trade-off is practical rather than physical: four leg openings take longer to fasten than one pullover, and a cat that dislikes being dressed has more surface area to object to.",
+      "The three styles here answer different questions rather than different levels of the same thing. The four-leg cotton onesie is the warmth piece — the closest thing on this page to a sweater's job, extended down each leg, and the one worth reaching for on a cold night or for a kitten that loses heat faster than an adult. The lightweight onesie trades warmth for coverage on a mild day, useful for a cat you want dressed but not insulated. The hooded onesie adds one more piece of coverage than either: the head and neck, which matters on the coldest nights and matters not at all in a warm room.",
+      "Fit follows the same rule as everywhere else on this site — chest first, then legs. A onesie that's loose at the chest will twist as the cat moves, which is more disruptive here than on a pullover because the twisting also drags at the leg openings. Check each leg opening will pass two fingers, and on the hooded style, check the hood lies flat and can be pushed back rather than sitting fixed over the ears. A cat trying to shake off a hood it can't remove is a cat that will fight the whole garment.",
+    ],
+    sizingTips: [
+      "Measure the chest just behind the front legs, the back length from neck to tail base, and the leg length from chest to paw for a four-leg style.",
+      "Kittens grow quickly — size for now rather than buying ahead, and expect to size up again within a few months.",
+      "Two fingers under each leg opening. Four openings means four chances to get one too tight.",
+      "On the hooded style, check the hood pushes back easily. If it doesn't move without effort, it will sit fixed in the one place a cat dislikes most.",
+    ],
+    careNotes: [
+      "Wash cool and air dry flat — a four-leg piece takes longer to dry than a pullover, so plan for that if it's the only one your cat has.",
+      "Check all leg openings and the hood edge for loose threads before every wear, the same as any other four-leg or hooded garment.",
+      "Two onesies in rotation matters more here than for a simple tee, since a full-body piece worn overnight picks up more oil over a longer stretch of skin.",
+      "Remove for unsupervised hours, particularly the four-leg style, which has more fabric for a determined cat to work into a tangle.",
+    ],
+    faqs: [
+      {
+        question: "What's the difference between sphynx cat pajamas and a onesie?",
+        answer:
+          "On this site, none — both describe the same full-body, four-leg garment, as opposed to a pullover sweater that only covers the torso. \"Pajamas\" tends to describe the everyday or bedtime piece; \"onesie\" is used more generally, including the hooded and lightweight styles.",
+      },
+      {
+        question: "Do sphynx cats need to wear pajamas at night?",
+        answer:
+          "Not always, but a onesie is worth it for a cat that sleeps somewhere cold or is a kitten still building body fat. A full-body piece covers the legs and belly a curled-up cat can't otherwise keep warm on its own. In a warm bedroom, bare skin overnight is usually fine.",
+      },
+      {
+        question: "Is a four-leg onesie harder to put on than a sweater?",
+        answer:
+          "Yes, and it's worth expecting that rather than being put off by it. Four leg openings take longer than one pullover, especially the first few times. Dress a calm, standing cat, one leg at a time, and it gets faster with practice on both sides.",
+      },
+      {
+        question: "Will my sphynx cat overheat in a hooded onesie?",
+        answer:
+          "In a warm room, yes it can — a hooded, full-body piece is the warmest style here. Save it for a cold night and watch for panting or restlessness, the same signs of overheating that apply to any fleece or heavy knit on this site.",
+      },
+    ],
+    productSlugs: [
+      "sphynx-cat-pajamas-cotton-four-leg-onesie",
+      "sphynx-cat-onesie-cartoon-cotton",
+      "sphynx-cat-onesie-dreamtime-hooded",
+    ],
+    relatedGuides: [],
+  },
 ];
 
 export const COLLECTION_SLUGS: readonly string[] = COLLECTIONS.map((c) => c.slug);

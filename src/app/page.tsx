@@ -39,8 +39,7 @@ const clothingCategories = [
     description:
       "Full-body onesies and pajamas with a snug fit that covers more skin than a shirt",
     emoji: "🩱",
-    // No pajamas collection yet — Phase 2 adds /sphynx-cat-pajamas.
-    href: "/products",
+    href: "/sphynx-cat-pajamas",
   },
   {
     name: "Hoodies",

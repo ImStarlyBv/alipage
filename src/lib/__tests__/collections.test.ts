@@ -46,18 +46,19 @@ const LIVE_PRODUCT_SLUGS: readonly string[] = [
 /**
  * The products no collection covers yet.
  *
- * `/sphynx-cat-pajamas` still owes these three (Phase 2). `/cat-recovery-suits`
- * (2026-09-17) and `/sphynx-cat-shirts` (2026-09-17) shipped ahead of it per the
- * Ubersuggest ordering in `SEO STRATEGY2026.md` §1.5 — recovery suit at
- * 6,600+ vol/mo SD 27, shirt at 70-110 vol/mo SD 27 vs. pajamas' 20-70 vol/mo
- * SD 26 — and their products are no longer orphaned. Pinned so that shrinking
- * this list has to be a decision, not a side effect.
+ * Empty as of 2026-09-17: `/cat-recovery-suits`, `/sphynx-cat-shirts` and
+ * `/sphynx-cat-pajamas` shipped in that order per the Ubersuggest ranking in
+ * `SEO STRATEGY2026.md` §1.5 (recovery suit 6,600+ vol/mo SD 27, shirt
+ * 70-110 vol/mo SD 27, pajamas 20-70 vol/mo SD 26), and between them they
+ * absorb every product `/sphynx-cat-sweaters`, `/sphynx-cat-hoodies`,
+ * `/sphynx-cat-winter-clothes` and `/sphynx-cat-christmas-sweaters` did not
+ * already claim. `/devon-rex-clothes` (lowest-volume collection in the plan,
+ * 20-40 vol/mo) is the one Phase 2 URL left — it cross-lists existing
+ * products rather than adopting new orphans, so it does not reopen this list.
+ * Kept as an explicit array, not deleted, so a future orphan is a visible
+ * regression here rather than a silent pass.
  */
-const ORPHAN_SLUGS: readonly string[] = [
-  "sphynx-cat-pajamas-cotton-four-leg-onesie",
-  "sphynx-cat-onesie-cartoon-cotton",
-  "sphynx-cat-onesie-dreamtime-hooded",
-];
+const ORPHAN_SLUGS: readonly string[] = [];
 
 /** Mirrors the `template` in `src/app/layout.tsx`. */
 const TITLE_SUFFIX = " | Kitty Control";
