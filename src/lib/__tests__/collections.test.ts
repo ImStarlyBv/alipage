@@ -46,23 +46,14 @@ const LIVE_PRODUCT_SLUGS: readonly string[] = [
 /**
  * The products no collection covers yet.
  *
- * These are not forgotten: Phase 2 still owes `/sphynx-cat-shirts` and
- * `/sphynx-cat-pajamas`, which absorb the rest. `/cat-recovery-suits` shipped
- * 2026-09-17 (Ubersuggest: `cat recovery suit` measures 6,600+ vol/mo at SD 27,
- * ahead of every other collection keyword in the plan — see
- * `SEO STRATEGY2026.md` §1.5) and its one product is no longer orphaned.
- * Pinned so that shrinking this list has to be a decision, not a side effect.
- *
- * `sphynx-cat-vest-tee-breton-stripe-cotton` is here despite the name. The live
- * product page describes it as a lightweight cotton sleeveless layer for warm
- * days — not a knit, and not a warm layer — so it does not belong in sweaters.
+ * `/sphynx-cat-pajamas` still owes these three (Phase 2). `/cat-recovery-suits`
+ * (2026-09-17) and `/sphynx-cat-shirts` (2026-09-17) shipped ahead of it per the
+ * Ubersuggest ordering in `SEO STRATEGY2026.md` §1.5 — recovery suit at
+ * 6,600+ vol/mo SD 27, shirt at 70-110 vol/mo SD 27 vs. pajamas' 20-70 vol/mo
+ * SD 26 — and their products are no longer orphaned. Pinned so that shrinking
+ * this list has to be a decision, not a side effect.
  */
 const ORPHAN_SLUGS: readonly string[] = [
-  "sphynx-cat-t-shirt-soft-cotton-short-sleeve",
-  "sphynx-cat-t-shirt-graphic-print-cotton",
-  "sphynx-cat-vest-tee-breton-stripe-cotton",
-  "sphynx-cat-shirt-gentleman-dress-shirt-tie",
-  "sphynx-cat-shirt-cherry-blossom-cotton-tee",
   "sphynx-cat-pajamas-cotton-four-leg-onesie",
   "sphynx-cat-onesie-cartoon-cotton",
   "sphynx-cat-onesie-dreamtime-hooded",

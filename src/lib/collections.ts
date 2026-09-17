@@ -565,6 +565,99 @@ export const COLLECTIONS: readonly Collection[] = [
     productSlugs: ["sphynx-cat-recovery-suit-soft-cotton"],
     relatedGuides: [],
   },
+
+  {
+    slug: "sphynx-cat-shirts",
+    name: "Sphynx Cat Shirts",
+    h1: "Sphynx Cat Shirts and Tees for Warm Days",
+    primaryKeyword: "sphynx cat shirt",
+    title: "Sphynx Cat Shirts & Tees for Hairless Cats",
+    description:
+      "Lightweight cotton shirts, tees and vests for sphynx and hairless cats: everyday basics, print tees and a dress shirt for warm rooms and sun.",
+    updatedAt: "2026-09-17",
+    answer:
+      "A sphynx cat shirt is a lightweight cotton layer for warm rooms and sun, not a substitute for a winter sweater. Cotton breathes, so it keeps a hairless cat comfortable in a heated home or air-conditioned room and adds a soft barrier between bare skin and direct sunlight, without the warmth a knit or fleece piece traps.",
+    fabricTable: {
+      caption: "Cotton shirt styles, and what each covers",
+      rows: [
+        {
+          fabric: "Lightweight cotton jersey (short-sleeve tee)",
+          warmth: "Low",
+          breathability: "High",
+          bestFor: "Warm rooms and everyday wear against bare skin",
+          watchOut: "Offers little real warmth — pair with a knit layer once the room cools",
+        },
+        {
+          fabric: "Sleeveless cotton vest",
+          warmth: "Low",
+          breathability: "High",
+          bestFor: "A cat that dislikes anything crossing the shoulder, or the mildest days",
+          watchOut: "Leaves the legs and shoulders bare, so it's a sun/chill layer, not a cold-weather one",
+        },
+        {
+          fabric: "Printed cotton (graphic or floral)",
+          warmth: "Low",
+          breathability: "Medium to high",
+          bestFor: "Everyday style without changing what the fabric does",
+          watchOut: "Wash cold and inside out so the print doesn't crack or fade early",
+        },
+        {
+          fabric: "Dress-shirt weight cotton",
+          warmth: "Low to medium",
+          breathability: "Medium",
+          bestFor: "Photos and short occasions rather than all-day wear",
+          watchOut: "Cut closer to the body for a tailored look — check chest fit before the event, not on the day",
+        },
+      ],
+    },
+    body: [
+      "A shirt does a different job on a sphynx than a sweater does. Where a knit or fleece piece exists to replace missing insulation, a cotton shirt exists to solve two lighter problems: a bare-skinned cat sitting under an air-conditioning vent, and a bare-skinned cat sitting in a sunny window. Cotton breathes enough that a cat wearing one in a normal room does not overheat, and the layer of fabric between skin and direct sun is real coverage, even without a specific sun-protection rating attached to it.",
+      "The four styles here split by occasion rather than by warmth, since none of them are meant to be warm. A short-sleeve tee is the everyday piece — quick to put on, comfortable for hours, and the one most owners reach for on a normal day. A sleeveless vest strips that down further for a cat that tolerates nothing crossing its shoulders; it covers less skin but is the easiest thing to dress a nervous or new cat in. The printed tees are the same cotton jersey with a graphic or a floral print, so choosing between them is about how the cat looks, not how it feels. The dress shirt is the outlier: cut closer to the body for photos, weddings and holidays, worn for an hour rather than a day.",
+      "Fit works the same way it does on every other garment here: measure the chest just behind the front legs, and treat that number as the size. A shirt that is loose at the chest will rotate as the cat walks and end up bunched to one side by the end of the day, which is more noticeable on a thin cotton layer than on a bulkier knit. The dress shirt in particular is tailored closer to the body, so a size that fits comfortably in the tee can still pull at the shoulder in that style — check it before the day you actually need it.",
+    ],
+    sizingTips: [
+      "Measure the chest just behind the front legs and the back length from neck to tail base, standing rather than curled up.",
+      "Cotton has less give than a ribbed knit, so size up rather than down if your cat sits between two sizes.",
+      "For the dress shirt specifically, try it on a few days before an event rather than the morning of, since the tailored cut runs closer to the body.",
+      "Check the neck and armholes with two fingers, the same as any other garment — a shirt that is snug in the wrong place gets worked off just as fast as a heavier one.",
+    ],
+    careNotes: [
+      "Machine wash cold, and wash printed tees inside out so the graphic or pattern doesn't crack or fade early.",
+      "Cotton against bare skin picks up oil the same way any fabric does — two or three in rotation keeps one clean while another is worn.",
+      "Air dry rather than tumble dry the printed and dress-shirt styles, so the print and the tailored seams hold their shape.",
+      "A cotton shirt is not a cold-weather layer — swap to a knit or fleece piece from the sweater or winter-clothes collection once the room turns cold.",
+    ],
+    faqs: [
+      {
+        question: "Do sphynx cats need to wear a shirt indoors?",
+        answer:
+          "Not for warmth in a normal room — bare skin is fine there. A shirt earns its place under an air-conditioning vent, in direct sun through a window, or simply as a light layer some owners prefer over bare skin. It is not doing the job a sweater does in a cold room.",
+      },
+      {
+        question: "Will a cotton shirt protect my sphynx cat from sunburn?",
+        answer:
+          "A layer of fabric between skin and direct sun helps, the same way covering up helps a person, but none of the shirts here carry a tested UPF rating, so treat it as reducing exposure rather than eliminating it. Keep a sunburn-prone cat out of direct midday sun regardless of what it's wearing.",
+      },
+      {
+        question: "What's the difference between a sphynx cat tee and a vest?",
+        answer:
+          "Sleeves. A tee covers the shoulders and upper legs with short sleeves; a vest is sleeveless and covers only the torso. Vests suit a cat that dislikes anything crossing its shoulder joint, or a first-time wearer, at the cost of a bit less coverage.",
+      },
+      {
+        question: "Can a sphynx cat wear a dress shirt for a whole day?",
+        answer:
+          "It's built for an occasion rather than all-day wear — a closer, tailored cut that looks sharp for a few hours but isn't the comfortable everyday fit the tees are. For a full day, choose the short-sleeve tee or vest and save the dress shirt for the photos.",
+      },
+    ],
+    productSlugs: [
+      "sphynx-cat-t-shirt-soft-cotton-short-sleeve",
+      "sphynx-cat-t-shirt-graphic-print-cotton",
+      "sphynx-cat-vest-tee-breton-stripe-cotton",
+      "sphynx-cat-shirt-gentleman-dress-shirt-tie",
+      "sphynx-cat-shirt-cherry-blossom-cotton-tee",
+    ],
+    relatedGuides: [],
+  },
 ];
 
 export const COLLECTION_SLUGS: readonly string[] = COLLECTIONS.map((c) => c.slug);

@@ -32,8 +32,7 @@ const clothingCategories = [
     description:
       "Lightweight cotton shirts and tank tops for everyday lounging and oil absorption",
     emoji: "👕",
-    // No shirts/tees collection yet — Phase 2 adds /sphynx-cat-shirts.
-    href: "/products",
+    href: "/sphynx-cat-shirts",
   },
   {
     name: "Pajamas & Onesies",
