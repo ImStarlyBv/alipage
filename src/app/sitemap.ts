@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/models";
+import { COLLECTIONS } from "@/lib/collections";
 
 const SITE_URL = "https://kittycontrol.shop";
 
@@ -21,6 +22,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  const collectionPages: MetadataRoute.Sitemap = COLLECTIONS.map((collection) => ({
+    url: `${SITE_URL}/${collection.slug}`,
+    lastModified: new Date(collection.updatedAt),
+    changeFrequency: "weekly",
+    priority: 0.85,
+  }));
+
   let productPages: MetadataRoute.Sitemap = [];
   try {
     const products = await prisma.product.findMany({
@@ -40,5 +48,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("[sitemap] failed to load products:", err);
   }
 
-  return [...staticPages, ...productPages];
+  return [...staticPages, ...collectionPages, ...productPages];
 }
