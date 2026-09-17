@@ -25,36 +25,44 @@ const clothingCategories = [
     description:
       "Soft, stretchy knit sweaters that keep your hairless cat warm indoors and out",
     emoji: "🧶",
+    href: "/sphynx-cat-sweaters",
   },
   {
     name: "Shirts & Tees",
     description:
       "Lightweight cotton shirts and tank tops for everyday lounging and oil absorption",
     emoji: "👕",
+    // No shirts/tees collection yet — Phase 2 adds /sphynx-cat-shirts.
+    href: "/products",
   },
   {
     name: "Pajamas & Onesies",
     description:
       "Full-body onesies and pajamas with a snug fit that covers more skin than a shirt",
     emoji: "🩱",
+    // No pajamas collection yet — Phase 2 adds /sphynx-cat-pajamas.
+    href: "/products",
   },
   {
     name: "Hoodies",
     description:
       "Cozy hooded tops for extra warmth on cold mornings and chilly homes",
     emoji: "🧥",
+    href: "/sphynx-cat-hoodies",
   },
   {
     name: "Winter & Fleece",
     description:
       "Fleece-lined layers and turtlenecks for the coldest months of the year",
     emoji: "❄️",
+    href: "/sphynx-cat-winter-clothes",
   },
   {
     name: "Costumes",
     description:
       "Fun seasonal and holiday costumes designed to fit a slender feline build",
     emoji: "🎃",
+    href: "/sphynx-cat-christmas-sweaters",
   },
 ];
 
@@ -216,10 +224,10 @@ export default async function Home() {
             Shop the Collection
           </Link>
           <Link
-            href="/categories"
+            href="/sphynx-cat-winter-clothes"
             className="inline-block rounded-full border border-primary px-8 py-3 text-sm font-medium text-primary-dark transition-colors hover:bg-primary/10"
           >
-            Browse Categories
+            Shop Winter Clothes
           </Link>
         </div>
       </section>
@@ -304,7 +312,7 @@ export default async function Home() {
             {clothingCategories.map((cat) => (
               <Link
                 key={cat.name}
-                href="/products"
+                href={cat.href}
                 className="group rounded-xl bg-white p-5 text-center shadow-sm transition-all hover:shadow-md hover:ring-1 hover:ring-primary/30"
               >
                 <span className="text-3xl">{cat.emoji}</span>
@@ -501,7 +509,7 @@ export default async function Home() {
                 temperature starts to drop.
               </p>
               <Link
-                href="/products"
+                href="/sphynx-cat-sweaters"
                 className="mt-3 inline-block text-sm font-medium text-primary-dark hover:text-primary"
               >
                 Shop autumn sweaters &rarr;
@@ -517,7 +525,7 @@ export default async function Home() {
                 chill in your home.
               </p>
               <Link
-                href="/products"
+                href="/sphynx-cat-winter-clothes"
                 className="mt-3 inline-block text-sm font-medium text-primary-dark hover:text-primary"
               >
                 Shop winter clothes &rarr;

@@ -14,8 +14,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/categories" className="transition-colors hover:text-white">
-                  Categories
+                <Link href="/sphynx-cat-winter-clothes" className="transition-colors hover:text-white">
+                  Winter Clothes
                 </Link>
               </li>
             </ul>

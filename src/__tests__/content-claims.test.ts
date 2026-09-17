@@ -65,3 +65,14 @@ describe("claims the homepage must not make", () => {
     expect(filesContaining(phrase)).toEqual([]);
   });
 });
+
+describe("the retired /categories route stays retired", () => {
+  it("has no href pointing at /categories anywhere in the app", () => {
+    // The route is deleted; /categories now only exists as a 308 to /products
+    // in next.config.ts, there for stale external links and old indexed URLs.
+    // An in-app <Link> should point straight at the real destination — a
+    // stale one here would send every click through an unnecessary redirect
+    // hop instead.
+    expect(filesContaining('href="/categories"')).toEqual([]);
+  });
+});

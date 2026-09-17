@@ -38,8 +38,8 @@ export default function Header() {
           <Link href="/products" className="text-foreground/70 transition-colors hover:text-primary-dark">
             Products
           </Link>
-          <Link href="/categories" className="text-foreground/70 transition-colors hover:text-primary-dark">
-            Categories
+          <Link href="/sphynx-cat-winter-clothes" className="text-foreground/70 transition-colors hover:text-primary-dark">
+            Winter Clothes
           </Link>
         </nav>
 
@@ -141,11 +141,11 @@ export default function Header() {
               Products
             </Link>
             <Link
-              href="/categories"
+              href="/sphynx-cat-winter-clothes"
               onClick={() => setMenuOpen(false)}
               className="text-foreground/70 transition-colors hover:text-primary-dark"
             >
-              Categories
+              Winter Clothes
             </Link>
 
             {session?.user ? (
