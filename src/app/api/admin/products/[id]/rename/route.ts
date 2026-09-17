@@ -120,9 +120,20 @@ export async function PATCH(
       );
     }
 
-    // The home page is ISR and renders product titles and links, so it would
+    // The home page and PDP are ISR and render product titles/links, so they'd
     // otherwise advertise the old copy — and, after a move, the old URL.
     revalidatePath("/");
+    const currentSlug = outcome.product.slug ?? outcome.product.id;
+    revalidatePath(`/products/${currentSlug}`);
+    if (outcome.movedFrom) {
+      revalidatePath(`/products/${outcome.movedFrom}`);
+    }
+    // A single call against the dynamic segment's own pattern invalidates
+    // every collection page at once — no need to derive which of the 4 (8
+    // after Phase 2) collections this product actually sits in. `type` is
+    // required here because the path is the route's literal pattern, not a
+    // resolved URL.
+    revalidatePath("/[collection]", "page");
 
     return Response.json({
       product: outcome.product,

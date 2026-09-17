@@ -3,6 +3,7 @@
 // Protected by a shared secret in the Authorization header.
 import { prisma } from "@/lib/models";
 import { getProduct } from "@/lib/services/aliexpress/products";
+import { revalidatePath } from "next/cache";
 
 const CRON_SECRET = process.env.CRON_SECRET;
 
@@ -16,7 +17,7 @@ export async function GET(request: Request) {
 
   const products = await prisma.product.findMany({
     where: { active: true },
-    select: { id: true, aliexpressId: true, markup: true },
+    select: { id: true, aliexpressId: true, markup: true, slug: true },
   });
 
   const results: Array<{
@@ -26,7 +27,10 @@ export async function GET(request: Request) {
     error?: string;
   }> = [];
 
+  let anyChanged = false;
+
   for (const product of products) {
+    const productPath = `/products/${product.slug ?? product.id}`;
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let result: any;
@@ -37,6 +41,8 @@ export async function GET(request: Request) {
           where: { id: product.id },
           data: { active: false },
         });
+        revalidatePath(productPath);
+        anyChanged = true;
         results.push({
           id: product.id,
           aliexpressId: product.aliexpressId,
@@ -52,6 +58,8 @@ export async function GET(request: Request) {
           where: { id: product.id },
           data: { active: false },
         });
+        revalidatePath(productPath);
+        anyChanged = true;
         results.push({
           id: product.id,
           aliexpressId: product.aliexpressId,
@@ -86,6 +94,8 @@ export async function GET(request: Request) {
           active: stock > 0,
         },
       });
+      revalidatePath(productPath);
+      anyChanged = true;
 
       results.push({
         id: product.id,
@@ -100,6 +110,16 @@ export async function GET(request: Request) {
         error: err instanceof Error ? err.message : "Unknown error",
       });
     }
+  }
+
+  // Home, /products and every collection page show price/stock, and are ISR —
+  // without this a sync would sit invisible until the hour elapsed. One call
+  // per surface, not per product: cheap, and simpler than tracking which of
+  // the 4 collections each changed product actually belongs to.
+  if (anyChanged) {
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath("/[collection]", "page");
   }
 
   const summary = {

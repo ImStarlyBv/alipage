@@ -7,6 +7,7 @@ import { rateLimit } from "@/lib/utils/rate-limit";
 import { validateBody, createReviewSchema } from "@/lib/utils/validation";
 import { handleApiError } from "@/lib/utils/api-error";
 import { getProductReviews, hasPurchasedProduct } from "@/lib/services/reviews";
+import { revalidatePath } from "next/cache";
 import type { NextRequest } from "next/server";
 
 export async function GET(
@@ -83,6 +84,16 @@ export async function POST(
         createdAt: true,
       },
     });
+
+    // The PDP is ISR (see src/app/products/[id]/page.tsx), so a newly approved
+    // review wouldn't otherwise appear until the hour elapses. Look up the
+    // product's own slug rather than trusting `identifier`, since a caller may
+    // have requested by id even though the page renders at the slug's URL.
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { slug: true },
+    });
+    revalidatePath(`/products/${product?.slug ?? productId}`);
 
     return Response.json(review, { status: 201 });
   } catch (err) {
