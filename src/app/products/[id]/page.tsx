@@ -12,7 +12,12 @@ import { getProductReviews } from "@/lib/services/reviews";
 import StarRating from "@/components/reviews/StarRating";
 import ReviewForm from "@/components/reviews/ReviewForm";
 
-export const dynamic = "force-dynamic";
+/* ── ISR: re-generate every hour. Safe now that the rename route, the
+   reviews POST route and the sync-products cron all revalidate this page's
+   own path on write — see those route handlers for the invalidation wiring.
+   No generateStaticParams here, so an uncached slug still renders on demand
+   and is cached from that point on, same as before. ── */
+export const revalidate = 3600;
 
 const PRODUCT_SELECT = {
   id: true,
